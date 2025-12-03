@@ -1,0 +1,14 @@
+html {
+  height: 200vw;
+}
+html body {
+  height: 100%;
+}
+html body #root {
+  height: 100%;
+  background-color: rgb(2, 2, 43);
+}
+html body #root main {
+  display: flex;
+  flex-direction: column;
+}/*# sourceMappingURL=App.css.map */

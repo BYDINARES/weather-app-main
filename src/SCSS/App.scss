@@ -1,7 +1,17 @@
 // (321px)
 html {
+  height: 200vw;
   body {
+    height: 100%;
     #root {
+      height: 100%;
+      background-color: rgb(2, 2, 43);
+      header {
+      }
+      main {
+        display: flex;
+        flex-direction: column;
+      }
     }
   }
 }

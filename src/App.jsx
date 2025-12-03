@@ -1,49 +1,65 @@
 // import { useState } from "react";
 // import "./App.css";
+import weatherNowLogo from "./images/logo.svg";
 
 function App() {
-  <>
-    <header>
-      <nav className="top-units-bar"></nav>
-      <h1 className="title"></h1>
+  return (
+    <>
+      <header>
+        <nav>
+          <img src={weatherNowLogo} alt="The App Logo" />
+          <div class="dropdown">
+            <button class="dropdown-toggle">Units ▼</button>
+            <label className="temperature" htmlFor=""></label>
+            <label className="wind-speed" htmlFor=""></label>
+            <label className="precipitation" htmlFor=""></label>
+          </div>
+        </nav>
 
-      <div class="search-bar">
-        <input type="text" placeholder="Search..." className="search-input" />
-        <button className="search">🔍</button>
-      </div>
-    </header>
+        <h1 className="title">How's the sky looking today?</h1>
 
-    <main>
-      <img src="" alt="" />
-      <section className="general-forecast">
+        <div className="search-bar">
+          <input
+            type="text"
+            placeholder="Search for a place..."
+            className="search-input"
+          />
+          <button className="search">Search</button>
+        </div>
+      </header>
+
+      <main>
         <img src="" alt="" />
-        <img src="" alt="" />
-        <img src="" alt="" />
-        <img src="" alt="" />
-      </section>
-      <section className="daily-forecast">
-        <img src="" alt="" />
-        <img src="" alt="" />
-        <img src="" alt="" />
-        <img src="" alt="" />
-        <img src="" alt="" />
-        <img src="" alt="" />
-        <img src="" alt="" />
-      </section>
-      <section className="hourly-forecast">
-        <img src="" alt="" />
-        <img src="" alt="" />
-        <img src="" alt="" />
-        <img src="" alt="" />
-        <img src="" alt="" />
-        <img src="" alt="" />
-        <img src="" alt="" />
-        <img src="" alt="" />
-        <img src="" alt="" />
-        <img src="" alt="" />
-      </section>
-    </main>
-  </>;
+        <section className="general-forecast">
+          <img src="" alt="" />
+          <img src="" alt="" />
+          <img src="" alt="" />
+          <img src="" alt="" />
+        </section>
+        <section className="daily-forecast">
+          <img src="" alt="" />
+          <img src="" alt="" />
+          <img src="" alt="" />
+          <img src="" alt="" />
+          <img src="" alt="" />
+          <img src="" alt="" />
+          <img src="" alt="" />
+        </section>
+        <section className="hourly-forecast">
+          <img src="" alt="" />
+          <img src="" alt="" />
+          <img src="" alt="" />
+          <img src="" alt="" />
+          <img src="" alt="" />
+          <img src="" alt="" />
+          <img src="" alt="" />
+          <img src="" alt="" />
+          <img src="" alt="" />
+          <img src="" alt="" />
+        </section>
+      </main>
+    </>
+  );
 }
 
 export default App;
