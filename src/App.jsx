@@ -10,9 +10,35 @@ function App() {
           <img src={weatherNowLogo} alt="The App Logo" />
           <div class="dropdown">
             <button class="dropdown-toggle">Units ▼</button>
-            <label className="temperature" htmlFor=""></label>
-            <label className="wind-speed" htmlFor=""></label>
-            <label className="precipitation" htmlFor=""></label>
+            <div>
+              <label className="temperature" htmlFor="">
+                <input type="radio" />
+              </label>
+
+              <label className="wind-speed" htmlFor="">
+                <input type="radio" />
+              </label>
+            </div>
+
+            <div>
+              <label className="temperature" htmlFor="">
+                <input type="radio" />
+              </label>
+
+              <label className="wind-speed" htmlFor="">
+                <input type="radio" />
+              </label>
+            </div>
+
+            <div>
+              <label className="temperature" htmlFor="">
+                <input type="radio" />
+              </label>
+
+              <label className="wind-speed" htmlFor="">
+                <input type="radio" />
+              </label>
+            </div>
           </div>
         </nav>
 
