@@ -1,12 +1,72 @@
 // (321px)
 html {
   height: 200vw;
+
   body {
     height: 100%;
+    padding: 0%;
+    margin: 0%;
     #root {
       height: 100%;
       background-color: rgb(2, 2, 43);
+      color: aliceblue;
+      padding: 4%;
+
       header {
+        nav {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          width: 100%;
+
+          img {
+            width: 40%;
+          }
+          section.dropdown {
+            button.dropdown-toggle {
+              background-color: rgb(45, 41, 61);
+              color: aliceblue;
+              border-radius: 5px;
+              border-style: none;
+              margin-bottom: 5%;
+            }
+            div.dropdown-section {
+              background-color: rgb(45, 41, 61);
+              padding: 5%;
+              border-radius: 10px;
+              position: absolute;
+              z-index: 2;
+              left: 44%;
+
+              button.switch {
+              }
+
+              //General styling
+              > div {
+                display: flex;
+                flex-direction: column;
+                div.option {
+                  display: flex;
+                  flex-direction: row;
+                }
+              }
+
+              //Specific styling
+              div.temperature {
+                display: flex;
+                flex-direction: column;
+              }
+              div.wind-speed {
+                display: flex;
+                flex-direction: column;
+              }
+              div.precipitation {
+                display: flex;
+                flex-direction: column;
+              }
+            }
+          }
+        }
       }
       main {
         display: flex;

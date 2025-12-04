@@ -1,45 +1,123 @@
-// import { useState } from "react";
-// import "./App.css";
+import { useState } from "react";
+import "./App.css";
 import weatherNowLogo from "./images/logo.svg";
 
 function App() {
+  const [openDropdown, setOpenDropdown] = useState(false);
+  const [temperature, setTemperature] = useState("celsius");
+
+  function Option({ name, value, label, selected, onChange }) {
+    return (
+      <label className="option">
+        <input
+          type="radio"
+          name={name}
+          value={value}
+          checked={selected === value}
+          onChange={() => onChange(value)}
+        />
+
+        <span className="text">{label}</span>
+        <span className="check"></span>
+      </label>
+    );
+  }
+
   return (
     <>
       <header>
         <nav>
           <img src={weatherNowLogo} alt="The App Logo" />
-          <div class="dropdown">
-            <button class="dropdown-toggle">Units ▼</button>
-            <div>
-              <label className="temperature" htmlFor="">
-                <input type="radio" />
-              </label>
 
-              <label className="wind-speed" htmlFor="">
-                <input type="radio" />
-              </label>
-            </div>
+          <section className="dropdown">
+            <button
+              className="dropdown-toggle"
+              onClick={() => setOpenDropdown((prev) => !prev)}
+            >
+              Units ▼
+            </button>
 
-            <div>
-              <label className="temperature" htmlFor="">
-                <input type="radio" />
-              </label>
+            {openDropdown && (
+              <div className="dropdown-section">
+                <button className="switch">Switch to Imperial</button>
 
-              <label className="wind-speed" htmlFor="">
-                <input type="radio" />
-              </label>
-            </div>
+                <div className="temperature">
+                  <h4>Temperature</h4>
 
-            <div>
-              <label className="temperature" htmlFor="">
-                <input type="radio" />
-              </label>
+                  <div className="option option-f">
+                    <label htmlFor="temperature-c">Celsius (°C)</label>
+                    <input
+                      type="radio"
+                      id="temperature-c"
+                      name="temperature"
+                      value="celsius"
+                      defaultChecked
+                    />
+                  </div>
 
-              <label className="wind-speed" htmlFor="">
-                <input type="radio" />
-              </label>
-            </div>
-          </div>
+                  <div className="option option-f">
+                    <label htmlFor="temperature-f">Fahrenheit (°F)</label>
+                    <input
+                      type="radio"
+                      id="temperature-f"
+                      name="temperature"
+                      value="fahrenheit"
+                    />
+                  </div>
+                </div>
+
+                <div className="wind-speed">
+                  <h4>Wind Speed</h4>
+
+                  <div className="option">
+                    <label htmlFor="wind-kmh">km/h</label>
+                    <input
+                      type="radio"
+                      id="wind-kmh"
+                      name="windSpeed"
+                      value="kmh"
+                      defaultChecked
+                    />
+                  </div>
+
+                  <div className="option">
+                    <label htmlFor="wind-mph">mph</label>
+                    <input
+                      type="radio"
+                      id="wind-mph"
+                      name="windSpeed"
+                      value="mph"
+                    />
+                  </div>
+                </div>
+
+                <div className="precipitation">
+                  <h4>Precipitation</h4>
+
+                  <div className="option">
+                    <label htmlFor="precip-mm">Millimeters (mm)</label>
+                    <input
+                      type="radio"
+                      id="precip-mm"
+                      name="precipitation"
+                      value="mm"
+                      defaultChecked
+                    />
+                  </div>
+
+                  <div className="option">
+                    <label htmlFor="precip-in">Inches (in)</label>
+                    <input
+                      type="radio"
+                      id="precip-in"
+                      name="precipitation"
+                      value="in"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+          </section>
         </nav>
 
         <h1 className="title">How's the sky looking today?</h1>
