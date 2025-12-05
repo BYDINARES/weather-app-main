@@ -1,6 +1,27 @@
 import { useState } from "react";
 import "./App.css";
+
+//Importing all the source elements
 import weatherNowLogo from "./images/logo.svg";
+
+//Icons
+import checkMark from "./images/icon-checkmark.svg";
+import iconDrizzle from "./images/icon-drizzle.webp";
+import iconDropdown from "./images/icon-dropdown.svg"; //<==========
+import iconError from "./images/icon-error.svg";
+import iconFog from "./images/icon-fog.webp";
+import iconLoading from "./images/icon-loading.svg";
+import iconSearch from "./images/icon-search.svg";
+
+import iconRetry from "./images/icon-retry.svg";
+import iconUnits from "./images/icon-units.svg";
+//Forcast icons
+import iconOvercast from "./images/icon-overcast.webp";
+import iconPartlyCloudy from "./images/icon-partly-cloudy.webp";
+import iconRain from "./images/icon-rain.webp";
+import iconSnow from "./images/icon-snow.webp";
+import iconStorm from "./images/icon-storm.webp";
+import iconSunny from "./images/icon-sunny.webp";
 
 function App() {
   const [openDropdown, setOpenDropdown] = useState(false);
@@ -34,7 +55,17 @@ function App() {
               className="dropdown-toggle"
               onClick={() => setOpenDropdown((prev) => !prev)}
             >
-              Units ▼
+              <img
+                className="settings-icon"
+                src={iconUnits}
+                alt="settings icon"
+              />
+              Units
+              <img
+                className="dropdown-icon"
+                src={iconDropdown}
+                alt="arrow pointing down"
+              />
             </button>
 
             {openDropdown && (
@@ -123,6 +154,7 @@ function App() {
         <h1 className="title">How's the sky looking today?</h1>
 
         <div className="search-bar">
+          <img src={iconSearch} alt="search icon" />
           <input
             type="text"
             placeholder="Search for a place..."
@@ -133,7 +165,13 @@ function App() {
       </header>
 
       <main>
-        <img src="" alt="" />
+        <section className="bg-today">
+          <h3 className="city-country"></h3>
+          <p className="date"></p>
+          <img src="" alt="A sun icon" />
+          <h1 className="grade"></h1>
+        </section>
+
         <section className="general-forecast">
           <img src="" alt="" />
           <img src="" alt="" />

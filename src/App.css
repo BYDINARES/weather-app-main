@@ -1,5 +1,5 @@
 html {
-  height: 200vw;
+  height: 400vw;
 }
 html body {
   height: 100%;
@@ -12,6 +12,9 @@ html body #root {
   color: aliceblue;
   padding: 4%;
 }
+html body #root header {
+  height: 20%;
+}
 html body #root header nav {
   display: flex;
   flex-direction: row;
@@ -21,12 +24,28 @@ html body #root header nav {
 html body #root header nav img {
   width: 40%;
 }
+html body #root header nav section.dropdown {
+  width: 30%;
+}
 html body #root header nav section.dropdown button.dropdown-toggle {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  height: 80%;
+  padding: 10%;
+  gap: 5%;
   background-color: rgb(45, 41, 61);
   color: aliceblue;
   border-radius: 5px;
   border-style: none;
   margin-bottom: 5%;
+}
+html body #root header nav section.dropdown button.dropdown-toggle img.settings-icon {
+  height: 100%;
+}
+html body #root header nav section.dropdown button.dropdown-toggle img.dropdown-icon {
+  height: 60%;
 }
 html body #root header nav section.dropdown div.dropdown-section {
   background-color: rgb(45, 41, 61);
@@ -56,7 +75,24 @@ html body #root header nav section.dropdown div.dropdown-section div.precipitati
   display: flex;
   flex-direction: column;
 }
+html body #root header h1.title {
+  width: 100%;
+  text-align: center;
+  font-size: 2.5rem;
+}
+html body #root header div.search-bar {
+  display: flex;
+  flex-direction: column;
+  height: 25%;
+  gap: 5%;
+}
 html body #root main {
   display: flex;
   flex-direction: column;
+  height: 80%;
+}
+html body #root main section.bg-today {
+  background-image: url("/public/bg-today-small.svg");
+  background-size: cover;
+  height: 24%;
 }/*# sourceMappingURL=App.css.map */
