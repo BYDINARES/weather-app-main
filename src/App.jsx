@@ -154,22 +154,25 @@ function App() {
         <h1 className="title">How's the sky looking today?</h1>
 
         <div className="search-bar">
-          <img src={iconSearch} alt="search icon" />
-          <input
-            type="text"
-            placeholder="Search for a place..."
-            className="search-input"
-          />
+          <div className="search-input">
+            <img src={iconSearch} alt="search icon" />
+            <input
+              type="text"
+              placeholder="Search for a place..."
+              className="search-input"
+            />
+          </div>
+
           <button className="search">Search</button>
         </div>
       </header>
 
       <main>
         <section className="bg-today">
-          <h3 className="city-country"></h3>
-          <p className="date"></p>
-          <img src="" alt="A sun icon" />
-          <h1 className="grade"></h1>
+          <h3 className="city-country">Berlin, Germany</h3>
+          <p className="date">Tuesday, Aug 5 2025</p>
+          <img src={iconSunny} alt="A sun icon" />
+          <h1 className="degree">20º</h1>
         </section>
 
         <section className="general-forecast">

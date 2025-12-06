@@ -11,9 +11,10 @@ html {
       background-color: rgb(2, 2, 43);
       color: aliceblue;
       padding: 4%;
+      font-family: "BricolageGrotesque";
 
       header {
-        height: 20%;
+        height: 32%;
         nav {
           display: flex;
           flex-direction: row;
@@ -49,19 +50,43 @@ html {
             }
             div.dropdown-section {
               background-color: rgb(45, 41, 61);
-              padding: 5%;
+              padding: 2%;
               border-radius: 10px;
               position: absolute;
               z-index: 2;
               left: 44%;
+              > * {
+                padding-right: 3%;
+                padding-left: 3%;
+              }
 
               button.switch {
+                width: 100%;
+                text-align: left;
+                padding-top: 5%;
+                padding-bottom: 5%;
+                background-color: transparent;
+                border-style: none;
+                border-radius: 8px;
+                color: aliceblue;
+                transition: all 0.1s ease;
+
+                &:hover,
+                &:focus-visible {
+                  background-color: rgb(74, 71, 87);
+                }
               }
 
               //General styling
               > div {
                 display: flex;
                 flex-direction: column;
+                padding-bottom: 6%;
+                h4 {
+                  margin-top: 12%;
+                  margin-bottom: 12%;
+                }
+
                 div.option {
                   display: flex;
                   flex-direction: row;
@@ -72,10 +97,12 @@ html {
               div.temperature {
                 display: flex;
                 flex-direction: column;
+                border-bottom: solid 1px rgb(87, 86, 86);
               }
               div.wind-speed {
                 display: flex;
                 flex-direction: column;
+                border-bottom: solid 1px rgb(87, 86, 86);
               }
               div.precipitation {
                 display: flex;
@@ -88,16 +115,52 @@ html {
         h1.title {
           width: 100%;
           text-align: center;
-          font-size: 2.5rem;
+          font-size: 2.9rem;
         }
         div.search-bar {
           display: flex;
           flex-direction: column;
-          height: 25%;
-          gap: 5%;
-          > input {
+          height: 28%;
+          gap: 10%;
+          div.search-input {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            width: 100%;
+            height: 40%;
+            box-sizing: border-box;
+            padding-left: 6%;
+            padding-right: 6%;
+            padding-top: 2%;
+            padding-bottom: 2%;
+
+            background-color: rgb(60, 57, 77);
+            border-radius: 8px;
+            > img {
+              height: fit-content;
+              width: 10%;
+              margin-right: 5%;
+            }
+            > input {
+              width: 90%;
+              background-color: transparent;
+              border: none;
+              color: white;
+              font-weight: 600;
+              font-size: 1rem;
+              &:focus {
+                outline: none;
+              }
+            }
           }
+
           > button {
+            height: 40%;
+            font-size: 1.1rem;
+            background-color: rgb(72, 83, 235);
+            border-style: none;
+            border-radius: 8px;
+            color: aliceblue;
           }
         }
       }
@@ -110,8 +173,51 @@ html {
           background-image: url("/public/bg-today-small.svg");
           background-size: cover;
           height: 24%;
+          font-family: "DMSans";
+          display: grid;
+          grid-template-columns: 50% 50%;
+          grid-template-rows: 20% 20% 60%;
+
+          box-sizing: border-box;
+          padding: 7%;
+          padding-bottom: 10%;
+
+          h3.city-country {
+            grid-row: 1/2;
+            grid-column: 1/3;
+            width: 100%;
+            text-align: center;
+            align-self: last baseline;
+            font-size: 1.5rem;
+            margin: 0%;
+          }
+          p.date {
+            grid-row: 2/3;
+            grid-column: 1/3;
+            width: 100%;
+            text-align: center;
+            align-self: last baseline;
+            margin: 0%;
+            margin-bottom: 5%;
+          }
+          img {
+            grid-row: 3;
+            grid-column: 1/2;
+            height: 90%;
+            align-self: center;
+          }
+          h1.degree {
+            grid-row: 3;
+            grid-column: 2;
+            font-size: 5rem;
+            align-self: center;
+            margin: 0%;
+          }
         }
       }
     }
   }
 }
+
+@import "_fonts.scss";
+@import "_mediaQueries";
