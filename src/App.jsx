@@ -167,7 +167,9 @@ function App() {
         </div>
       </header>
 
+      {/* ========= The MAIN ========= */}
       <main>
+        {/* forcast of today */}
         <section className="bg-today">
           <h3 className="city-country">Berlin, Germany</h3>
           <p className="date">Tuesday, Aug 5 2025</p>
@@ -175,32 +177,136 @@ function App() {
           <h1 className="degree">20º</h1>
         </section>
 
+        {/* The 4 general forecats */}
         <section className="general-forecast">
-          <img src="" alt="" />
-          <img src="" alt="" />
-          <img src="" alt="" />
-          <img src="" alt="" />
+          <article className="feels-like">
+            <h3>Feels Like</h3>
+            <p>18º</p>
+          </article>
+
+          <article className="humidity">
+            <h3>Humidity</h3>
+            <p>46%</p>
+          </article>
+
+          <article className="wind">
+            <h3>Wind</h3>
+            <p>14 km/h</p>
+          </article>
+
+          <article className="precipitation">
+            <h3>Precipitation</h3>
+            <p>0 mm</p>
+          </article>
         </section>
+
+        {/* The forecat for the week REMEMBER THAT THIS SECTION CONSIDERS ONE WEEK FROM THE DAY YOU DID FORECAST*/}
         <section className="daily-forecast">
-          <img src="" alt="" />
-          <img src="" alt="" />
-          <img src="" alt="" />
-          <img src="" alt="" />
-          <img src="" alt="" />
-          <img src="" alt="" />
-          <img src="" alt="" />
+          <h2>Daily forecast</h2>
+          <div>
+            <article>
+              <h3>Tue</h3>
+              <img src={iconRain} alt="Rain Icon" />
+              <div className="dregres-range">
+                <p className="max-d">20°</p>
+                <p className="min-d">14°</p>
+              </div>
+            </article>
+            <article>
+              <h3>Wed</h3>
+              <img src={iconDrizzle} alt="Drizzle Icon" />
+              <div className="dregres-range">
+                <p className="max-d">21°</p>
+                <p className="min-d">15°</p>
+              </div>
+            </article>
+            <article>
+              <h3>Thu</h3>
+              <img src={iconSunny} alt="Sunny Icon" />
+              <div className="dregres-range">
+                <p className="max-d">24°</p>
+                <p className="min-d">14°</p>
+              </div>
+            </article>
+            <article>
+              <h3>Fri</h3>
+              <img src={iconPartlyCloudy} alt="Partly Cloudy Icon" />
+              <div className="dregres-range">
+                <p className="max-d">25°</p>
+                <p className="min-d">13°</p>
+              </div>
+            </article>
+            <article>
+              <h3>Sat</h3>
+              <img src={iconStorm} alt="Storm Icon" />
+              <div className="dregres-range">
+                <p className="max-d">21°</p>
+                <p className="min-d">15°</p>
+              </div>
+            </article>
+            <article>
+              <h3>Sun</h3>
+              <img src={iconSnow} alt="Snow Icon" />
+              <div className="dregres-range">
+                <p className="max-d">25°</p>
+                <p className="min-d">16°</p>
+              </div>
+            </article>
+            <article>
+              <h3>Mon</h3>
+              <img src={iconFog} alt="Fog Icon" />
+              <div className="dregres-range">
+                <p className="max-d">24°</p>
+                <p className="min-d">15°</p>
+              </div>
+            </article>
+          </div>
         </section>
+
         <section className="hourly-forecast">
-          <img src="" alt="" />
-          <img src="" alt="" />
-          <img src="" alt="" />
-          <img src="" alt="" />
-          <img src="" alt="" />
-          <img src="" alt="" />
-          <img src="" alt="" />
-          <img src="" alt="" />
-          <img src="" alt="" />
-          <img src="" alt="" />
+          <div>
+            <h2>Hourly forecast</h2>
+            <section className="dropdown-day">
+              <button></button>
+            </section>
+          </div>
+          <ul>
+            <li>
+              <img src="" alt="" />
+              <p className="hour"></p>
+              <p className="deagree"></p>
+            </li>
+            <li>
+              <img src="" alt="" />
+              <p className="hour"></p>
+              <p className="deagree"></p>
+            </li>
+            <li>
+              <img src="" alt="" />
+              <p className="hour"></p>
+              <p className="deagree"></p>
+            </li>
+            <li>
+              <img src="" alt="" />
+              <p className="hour"></p>
+              <p className="deagree"></p>
+            </li>
+            <li>
+              <img src="" alt="" />
+              <p className="hour"></p>
+              <p className="deagree"></p>
+            </li>
+            <li>
+              <img src="" alt="" />
+              <p className="hour"></p>
+              <p className="deagree"></p>
+            </li>
+            <li>
+              <img src="" alt="" />
+              <p className="hour"></p>
+              <p className="deagree"></p>
+            </li>
+          </ul>
         </section>
       </main>
     </>
