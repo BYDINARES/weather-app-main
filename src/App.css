@@ -230,6 +230,7 @@ html body #root main section.general-forecast article p {
 }
 html body #root main section.daily-forecast {
   width: 100%;
+  height: 24%;
 }
 html body #root main section.daily-forecast h2 {
   font-size: 1.1rem;
@@ -266,6 +267,74 @@ html body #root main section.daily-forecast div article div.dregres-range {
   width: 100%;
 }
 html body #root main section.daily-forecast div article div.dregres-range p {
+  margin: 0%;
+}
+html body #root main section.hourly-forecast {
+  height: 24%;
+  background-color: rgb(41, 39, 65);
+  border-radius: 20px;
+  padding: 5%;
+}
+html body #root main section.hourly-forecast div.top-pick-a-day {
+  height: 5%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+html body #root main section.hourly-forecast div.top-pick-a-day h2 {
+  margin: 0%;
+  font-size: 1rem;
+}
+html body #root main section.hourly-forecast div.top-pick-a-day section.dropdown-day {
+  width: 38%;
+}
+html body #root main section.hourly-forecast div.top-pick-a-day section.dropdown-day button {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  box-sizing: border-box;
+  width: 100%;
+  padding-left: 13%;
+  padding-right: 13%;
+  padding-top: 5%;
+  padding-bottom: 5%;
+  background-color: rgb(69, 65, 102);
+  color: aliceblue;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 5px;
+}
+html body #root main section.hourly-forecast ul.hours-list {
+  height: 90%;
+  list-style: none;
+  padding-left: 0%;
+}
+html body #root main section.hourly-forecast ul.hours-list li {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 9.5%;
+  width: 100%;
+  box-sizing: border-box;
+  padding-left: 5%;
+  padding-right: 5%;
+  margin-bottom: 5%;
+  background-color: rgb(54, 51, 83);
+  border-radius: 8px;
+  border: solid 0.5px rgb(73, 73, 73);
+}
+html body #root main section.hourly-forecast ul.hours-list li > img {
+  width: 15%;
+  height: 90%;
+}
+html body #root main section.hourly-forecast ul.hours-list li > p.hour {
+  width: 20%;
+  margin: 0%;
+  text-align: center;
+}
+html body #root main section.hourly-forecast ul.hours-list li > p.deagree {
+  margin-left: auto;
   margin: 0%;
 }
 

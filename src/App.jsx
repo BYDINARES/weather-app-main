@@ -264,47 +264,55 @@ function App() {
         </section>
 
         <section className="hourly-forecast">
-          <div>
+          <div className="top-pick-a-day">
             <h2>Hourly forecast</h2>
             <section className="dropdown-day">
-              <button></button>
+              <button>
+                Tuesday
+                <img src={iconDropdown} alt="Dropdown icon" />
+              </button>
             </section>
           </div>
-          <ul>
-            <li>
-              <img src="" alt="" />
-              <p className="hour"></p>
-              <p className="deagree"></p>
+          <ul className="hours-list">
+            <li className="time-3pm">
+              <img src={iconOvercast} alt="cloud icon" />
+              <p className="hour">3 PM</p>
+              <p className="deagree">20°</p>
             </li>
-            <li>
-              <img src="" alt="" />
-              <p className="hour"></p>
-              <p className="deagree"></p>
+            <li className="time-4pm">
+              <img src={iconPartlyCloudy} alt="A sun with a cloud icon" />
+              <p className="hour">4 PM</p>
+              <p className="deagree">20°</p>
             </li>
-            <li>
-              <img src="" alt="" />
-              <p className="hour"></p>
-              <p className="deagree"></p>
+            <li className="time-5pm">
+              <img src={iconSunny} alt="Sun Icon" />
+              <p className="hour">5 PM</p>
+              <p className="deagree">20°</p>
             </li>
-            <li>
-              <img src="" alt="" />
-              <p className="hour"></p>
-              <p className="deagree"></p>
+            <li className="time-6pm">
+              <img src={iconOvercast} alt="Cloud icon" />
+              <p className="hour">6 PM</p>
+              <p className="deagree">19°</p>
             </li>
-            <li>
-              <img src="" alt="" />
-              <p className="hour"></p>
-              <p className="deagree"></p>
+            <li className="time-7pm">
+              <img src={iconSnow} alt="Snow icon" />
+              <p className="hour">7 PM</p>
+              <p className="deagree">18°</p>
             </li>
-            <li>
-              <img src="" alt="" />
-              <p className="hour"></p>
-              <p className="deagree"></p>
+            <li className="time-8pm">
+              <img src={iconFog} alt="Fog icon" />
+              <p className="hour">8 PM</p>
+              <p className="deagree">18°</p>
             </li>
-            <li>
-              <img src="" alt="" />
-              <p className="hour"></p>
-              <p className="deagree"></p>
+            <li className="time-9pm">
+              <img src={iconSnow} alt="Snow icon" />
+              <p className="hour">9 PM</p>
+              <p className="deagree">17°</p>
+            </li>
+            <li className="time-10pm">
+              <img src={iconOvercast} alt="Cloud Icon" />
+              <p className="hour">10 PM</p>
+              <p className="deagree">17°</p>
             </li>
           </ul>
         </section>
