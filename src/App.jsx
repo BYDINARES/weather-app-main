@@ -26,6 +26,11 @@ import iconSunny from "./images/icon-sunny.webp";
 function App() {
   const [openDropdown, setOpenDropdown] = useState(false);
   const [temperature, setTemperature] = useState("celsius");
+  const [dropdownOptions, setDropdownOptions] = useState({
+    temperature: "",
+    windSpeed: "",
+    precipitation: "",
+  });
 
   function Option({ name, value, label, selected, onChange }) {
     return (
@@ -82,8 +87,23 @@ function App() {
                       id="temperature-c"
                       name="temperature"
                       value="celsius"
+                      onClick={() =>
+                        setDropdownOptions((prev) => ({
+                          ...prev,
+                          temperature: "celsius",
+                        }))
+                      }
                       defaultChecked
                     />
+                    {dropdownOptions.temperature === "celsius" ? (
+                      <img
+                        className="full-img"
+                        src={checkMark}
+                        alt="check mark"
+                      />
+                    ) : (
+                      <img className="empty-img" />
+                    )}
                   </div>
 
                   <div className="option option-f">
@@ -93,7 +113,22 @@ function App() {
                       id="temperature-f"
                       name="temperature"
                       value="fahrenheit"
+                      onClick={() =>
+                        setDropdownOptions((prev) => ({
+                          ...prev,
+                          temperature: "fahrenheit",
+                        }))
+                      }
                     />
+                    {dropdownOptions.temperature === "fahrenheit" ? (
+                      <img
+                        className="full-img"
+                        src={checkMark}
+                        alt="check mark"
+                      />
+                    ) : (
+                      <img className="empty-img" />
+                    )}
                   </div>
                 </div>
 
@@ -107,8 +142,23 @@ function App() {
                       id="wind-kmh"
                       name="windSpeed"
                       value="kmh"
+                      onClick={() =>
+                        setDropdownOptions((prev) => ({
+                          ...prev,
+                          windSpeed: "km/h",
+                        }))
+                      }
                       defaultChecked
                     />
+                    {dropdownOptions.windSpeed === "km/h" ? (
+                      <img
+                        className="full-img"
+                        src={checkMark}
+                        alt="check mark"
+                      />
+                    ) : (
+                      <img className="empty-img" />
+                    )}
                   </div>
 
                   <div className="option">
@@ -118,7 +168,22 @@ function App() {
                       id="wind-mph"
                       name="windSpeed"
                       value="mph"
+                      onClick={() =>
+                        setDropdownOptions((prev) => ({
+                          ...prev,
+                          windSpeed: "mph",
+                        }))
+                      }
                     />
+                    {dropdownOptions.windSpeed === "mph" ? (
+                      <img
+                        className="full-img"
+                        src={checkMark}
+                        alt="check mark"
+                      />
+                    ) : (
+                      <img className="empty-img" />
+                    )}
                   </div>
                 </div>
 
@@ -132,8 +197,23 @@ function App() {
                       id="precip-mm"
                       name="precipitation"
                       value="mm"
+                      onClick={() =>
+                        setDropdownOptions((prev) => ({
+                          ...prev,
+                          precipitation: "mm",
+                        }))
+                      }
                       defaultChecked
                     />
+                    {dropdownOptions.precipitation === "mm" ? (
+                      <img
+                        className="full-img"
+                        src={checkMark}
+                        alt="check mark"
+                      />
+                    ) : (
+                      <img className="empty-img" />
+                    )}
                   </div>
 
                   <div className="option">
@@ -143,7 +223,22 @@ function App() {
                       id="precip-in"
                       name="precipitation"
                       value="in"
+                      onClick={() =>
+                        setDropdownOptions((prev) => ({
+                          ...prev,
+                          precipitation: "in",
+                        }))
+                      }
                     />
+                    {dropdownOptions.precipitation === "in" ? (
+                      <img
+                        className="full-img"
+                        src={checkMark}
+                        alt="check mark"
+                      />
+                    ) : (
+                      <img className="empty-img" />
+                    )}
                   </div>
                 </div>
               </div>
