@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 
 //Importing all the source elements
@@ -22,15 +22,31 @@ import iconRain from "./images/icon-rain.webp";
 import iconSnow from "./images/icon-snow.webp";
 import iconStorm from "./images/icon-storm.webp";
 import iconSunny from "./images/icon-sunny.webp";
+import { use } from "react";
 
 function App() {
   const [openDropdown, setOpenDropdown] = useState(false);
+  const [isRendered, setIsRendered] = useState(false);
+
   const [temperature, setTemperature] = useState("celsius");
   const [dropdownOptions, setDropdownOptions] = useState({
     temperature: "",
     windSpeed: "",
     precipitation: "",
   });
+
+  //======== Efects =======
+  useEffect(() => {
+    if (openDropdown) {
+      setIsRendered(true);
+    } else {
+      const timer = setTimeout(() => {
+        setIsRendered(false);
+      }, 200);
+
+      return () => clearTimeout(timer);
+    }
+  }, [openDropdown]);
 
   function Option({ name, value, label, selected, onChange }) {
     return (
@@ -73,8 +89,14 @@ function App() {
               />
             </button>
 
-            {openDropdown && (
-              <div className="dropdown-section">
+            {isRendered && (
+              <div
+                className={
+                  openDropdown
+                    ? "dropdown-section dropdown-enter"
+                    : "dropdown-section dropdown-section-fade"
+                }
+              >
                 <button className="switch">Switch to Imperial</button>
 
                 <div className="temperature">
