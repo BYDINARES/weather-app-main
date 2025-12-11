@@ -22,18 +22,22 @@ import iconRain from "./images/icon-rain.webp";
 import iconSnow from "./images/icon-snow.webp";
 import iconStorm from "./images/icon-storm.webp";
 import iconSunny from "./images/icon-sunny.webp";
-import { use } from "react";
 
 function App() {
   const [openDropdown, setOpenDropdown] = useState(false);
   const [isRendered, setIsRendered] = useState(false);
 
-  const [temperature, setTemperature] = useState("celsius");
+  //dropdown
   const [dropdownOptions, setDropdownOptions] = useState({
-    temperature: "",
-    windSpeed: "",
-    precipitation: "",
+    temperature: "celsius",
+    windSpeed: "km/h",
+    precipitation: "mm",
   });
+  const [switchToImperialMode, setSwitchToImperialMode] = useState(false);
+
+  //Search nav
+  const [weatherData, setWeatherData] = useState({});
+  const [searchQuery, setSearchQuery] = useState("");
 
   //======== Efects =======
   useEffect(() => {
@@ -47,6 +51,34 @@ function App() {
       return () => clearTimeout(timer);
     }
   }, [openDropdown]);
+
+  useEffect(() => {
+    if (weatherData.location) {
+      fetchData(searchQuery, dropdownOptions);
+    }
+  }, [dropdownOptions]);
+
+  //======== functions ==========
+
+  function toggleUnits() {
+    const switchToImperial = {
+      temperature: "fahrenheit",
+      windSpeed: "mph",
+      precipitation: "in",
+    };
+
+    if (!switchToImperialMode) {
+      setDropdownOptions(switchToImperial);
+      setSwitchToImperialMode(true);
+    } else {
+      setDropdownOptions({
+        temperature: "celsius",
+        windSpeed: "km/h",
+        precipitation: "mm",
+      });
+      setSwitchToImperialMode(false);
+    }
+  }
 
   function Option({ name, value, label, selected, onChange }) {
     return (
@@ -63,6 +95,50 @@ function App() {
         <span className="check"></span>
       </label>
     );
+  }
+
+  function buildUnitParams(opts) {
+    return {
+      temperature: opts.temperature === "celsius" ? "celsius" : "fahrenheit",
+      wind: opts.windSpeed === "km/h" ? "kmh" : "mph",
+      precipitation: opts.precipitation, // "mm" or "in"
+    };
+  }
+
+  async function fetchData(query, units) {
+    try {
+      // Convert dropdown units to API-friendly format
+      const unitParams = buildUnitParams(units);
+
+      // 1. Search the location
+      const geoRes = await fetch(
+        `https://geocoding-api.open-meteo.com/v1/search?name=${query}`
+      );
+      const geoData = await geoRes.json();
+
+      if (!geoData.results || geoData.results.length === 0) {
+        console.error("No results found");
+        return;
+      }
+
+      const { latitude, longitude, name, country } = geoData.results[0];
+
+      // 2. Create FULL weather request with unit options
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,wind_speed_10m,relative_humidity_2m,precipitation&hourly=temperature_2m,precipitation,weather_code&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weather_code&temperature_unit=${unitParams.temperature}&wind_speed_unit=${unitParams.wind}&precipitation_unit=${unitParams.precipitation}&timezone=auto`;
+
+      const weatherRes = await fetch(url);
+      const weather = await weatherRes.json();
+
+      // 3. Store everything for rendering
+      setWeatherData({
+        location: `${name}, ${country}`,
+        current: weather.current,
+        hourly: weather.hourly,
+        daily: weather.daily,
+      });
+    } catch (err) {
+      console.error("Failed to fetch weather:", err);
+    }
   }
 
   return (
@@ -97,7 +173,11 @@ function App() {
                     : "dropdown-section dropdown-section-fade"
                 }
               >
-                <button className="switch">Switch to Imperial</button>
+                <button className="switch" onClick={() => toggleUnits()}>
+                  {switchToImperialMode
+                    ? "Switch to Metric"
+                    : "Switch to Imperial"}
+                </button>
 
                 <div className="temperature">
                   <h4>Temperature</h4>
@@ -277,10 +357,17 @@ function App() {
               type="text"
               placeholder="Search for a place..."
               className="search-input"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
 
-          <button className="search">Search</button>
+          <button
+            className="search"
+            onClick={() => fetchData(searchQuery, dropdownOptions)}
+          >
+            Search
+          </button>
         </div>
       </header>
 
@@ -288,8 +375,21 @@ function App() {
       <main>
         {/* forcast of today */}
         <section className="bg-today">
-          <h3 className="city-country">Berlin, Germany</h3>
-          <p className="date">Tuesday, Aug 5 2025</p>
+          <h3 className="city-country">
+            {weatherData.location ? weatherData.location : "Berlin, Germany"}
+          </h3>
+          <p className="date">
+            {weatherData.location
+              ? (() => {
+                  const d = new Date();
+                  return `${d.toLocaleDateString("en-US", {
+                    weekday: "long",
+                  })}, ${d.toLocaleDateString("en-US", {
+                    month: "short",
+                  })} ${d.getDate()} ${d.getFullYear()}`;
+                })()
+              : "Tuesday, Aug 5 2025"}
+          </p>
           <img src={iconSunny} alt="A sun icon" />
           <h1 className="degree">20º</h1>
         </section>
@@ -298,7 +398,7 @@ function App() {
         <section className="general-forecast">
           <article className="feels-like">
             <h3>Feels Like</h3>
-            <p>18º</p>
+            <p>18°</p>
           </article>
 
           <article className="humidity">
