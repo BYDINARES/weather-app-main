@@ -124,7 +124,7 @@ function App() {
       const { latitude, longitude, name, country } = geoData.results[0];
 
       // 2. Create FULL weather request with unit options
-      const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,wind_speed_10m,relative_humidity_2m,precipitation&hourly=temperature_2m,precipitation,weather_code&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weather_code&temperature_unit=${unitParams.temperature}&wind_speed_unit=${unitParams.wind}&precipitation_unit=${unitParams.precipitation}&timezone=auto`;
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,wind_speed_10m,relative_humidity_2m,precipitation&hourly=temperature_2m,precipitation,weather_code&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weather_code&forecast_days=8&temperature_unit=${unitParams.temperature}&wind_speed_unit=${unitParams.wind}&precipitation_unit=${unitParams.precipitation}&timezone=auto`;
 
       const weatherRes = await fetch(url);
       const weather = await weatherRes.json();
@@ -140,6 +140,99 @@ function App() {
       console.error("Failed to fetch weather:", err);
     }
   }
+
+  //Values of the weather Icons
+  const weatherIcons = {
+    0: iconSunny,
+    1: iconPartlyCloudy,
+    2: iconPartlyCloudy,
+    3: iconOvercast,
+    45: iconFog,
+    48: iconFog,
+    51: iconDrizzle,
+    53: iconDrizzle,
+    55: iconDrizzle,
+    61: iconRain,
+    63: iconRain,
+    65: iconRain,
+    71: iconSnow,
+    73: iconSnow,
+    75: iconSnow,
+    80: iconRain,
+    81: iconRain,
+    82: iconRain,
+    95: iconStorm,
+    96: iconStorm,
+    99: iconStorm,
+  };
+
+  function HourlyForecast({ weatherData, selectedDay }) {
+    if (!weatherData || !weatherData.hourly) return null;
+
+    // Build hourly objects
+    const hourly = weatherData.hourly.time.map((t, i) => ({
+      date: new Date(t),
+      temp: weatherData.hourly.temperature_2m[i],
+      code: weatherData.hourly.weather_code[i],
+    }));
+
+    // If selectedDay is missing, default to today's date
+    const now = new Date();
+    const selectedDate = selectedDay
+      ? new Date(selectedDay)
+      : new Date(now.toISOString().split("T")[0]); // midnight today
+
+    selectedDate.setHours(0, 0, 0, 0);
+
+    // TODAY? → start at current hour
+    let startMoment;
+    if (selectedDate.toDateString() === now.toDateString()) {
+      startMoment = new Date(now);
+      startMoment.setMinutes(0, 0, 0);
+    } else {
+      // FUTURE DAY → start at midnight
+      startMoment = new Date(selectedDate);
+    }
+
+    // Find hour in global hourly array
+    const startIndex = hourly.findIndex(
+      (h) => h.date.getTime() >= startMoment.getTime()
+    );
+
+    if (startIndex === -1) {
+      return <p style={{ padding: 16 }}>No hours available.</p>;
+    }
+
+    // Always return exactly 10 hours
+    const next10 = hourly.slice(startIndex, startIndex + 10);
+
+    return (
+      <ul className="hours-list">
+        {next10.map((h, i) => {
+          const hr = h.date.getHours();
+          const label =
+            hr === 0
+              ? "12 AM"
+              : hr < 12
+              ? `${hr} AM`
+              : hr === 12
+              ? "12 PM"
+              : `${hr - 12} PM`;
+
+          return (
+            <li key={i}>
+              <img src={weatherIcons[h.code] || iconOvercast} />
+              <p className="hour">{label}</p>
+              <p className="deagree">{Math.round(h.temp)}°</p>
+            </li>
+          );
+        })}
+      </ul>
+    );
+  }
+
+  console.log("daily", weatherData.daily);
+  console.log("hourly", weatherData.hourly);
 
   return (
     <>
@@ -420,63 +513,111 @@ function App() {
         {/* The forecat for the week REMEMBER THAT THIS SECTION CONSIDERS ONE WEEK FROM THE DAY YOU DID FORECAST*/}
         <section className="daily-forecast">
           <h2>Daily forecast</h2>
+
           <div>
-            <article>
-              <h3>Tue</h3>
-              <img src={iconRain} alt="Rain Icon" />
-              <div className="dregres-range">
-                <p className="max-d">20°</p>
-                <p className="min-d">14°</p>
-              </div>
-            </article>
-            <article>
-              <h3>Wed</h3>
-              <img src={iconDrizzle} alt="Drizzle Icon" />
-              <div className="dregres-range">
-                <p className="max-d">21°</p>
-                <p className="min-d">15°</p>
-              </div>
-            </article>
-            <article>
-              <h3>Thu</h3>
-              <img src={iconSunny} alt="Sunny Icon" />
-              <div className="dregres-range">
-                <p className="max-d">24°</p>
-                <p className="min-d">14°</p>
-              </div>
-            </article>
-            <article>
-              <h3>Fri</h3>
-              <img src={iconPartlyCloudy} alt="Partly Cloudy Icon" />
-              <div className="dregres-range">
-                <p className="max-d">25°</p>
-                <p className="min-d">13°</p>
-              </div>
-            </article>
-            <article>
-              <h3>Sat</h3>
-              <img src={iconStorm} alt="Storm Icon" />
-              <div className="dregres-range">
-                <p className="max-d">21°</p>
-                <p className="min-d">15°</p>
-              </div>
-            </article>
-            <article>
-              <h3>Sun</h3>
-              <img src={iconSnow} alt="Snow Icon" />
-              <div className="dregres-range">
-                <p className="max-d">25°</p>
-                <p className="min-d">16°</p>
-              </div>
-            </article>
-            <article>
-              <h3>Mon</h3>
-              <img src={iconFog} alt="Fog Icon" />
-              <div className="dregres-range">
-                <p className="max-d">24°</p>
-                <p className="min-d">15°</p>
-              </div>
-            </article>
+            {weatherData.daily ? (
+              weatherData.daily.time
+                .map((day, i) => ({
+                  date: new Date(day),
+                  code: weatherData.daily.weather_code[i],
+                  max: weatherData.daily.temperature_2m_max[i],
+                  min: weatherData.daily.temperature_2m_min[i],
+                }))
+                .filter((item) => {
+                  // keep ONLY today and the future
+                  const today = new Date();
+                  today.setHours(0, 0, 0, 0);
+                  return item.date >= today;
+                })
+                .slice(0, 7) // ensure EXACTLY 7 days
+                .map((item, i) => {
+                  const weekday = item.date.toLocaleDateString("en-US", {
+                    weekday: "short",
+                  });
+
+                  return (
+                    <article key={i}>
+                      <h3>{weekday}</h3>
+
+                      <img
+                        src={weatherIcons[item.code] || iconOvercast}
+                        alt="Weather icon"
+                      />
+
+                      <div className="dregres-range">
+                        <p className="max-d">{item.max}°</p>
+                        <p className="min-d">{item.min}°</p>
+                      </div>
+                    </article>
+                  );
+                })
+            ) : (
+              // ===== fallback UI before search =====
+              <>
+                <article>
+                  <h3>Tue</h3>
+                  <img src={iconRain} alt="Rain" />
+                  <div className="dregres-range">
+                    <p className="max-d">20°</p>
+                    <p className="min-d">14°</p>
+                  </div>
+                </article>
+
+                <article>
+                  <h3>Wed</h3>
+                  <img src={iconDrizzle} alt="Drizzle" />
+                  <div className="dregres-range">
+                    <p className="max-d">21°</p>
+                    <p className="min-d">15°</p>
+                  </div>
+                </article>
+
+                <article>
+                  <h3>Thu</h3>
+                  <img src={iconSunny} alt="Sunny" />
+                  <div className="dregres-range">
+                    <p className="max-d">24°</p>
+                    <p className="min-d">14°</p>
+                  </div>
+                </article>
+
+                <article>
+                  <h3>Fri</h3>
+                  <img src={iconPartlyCloudy} alt="Partly Cloudy" />
+                  <div className="dregres-range">
+                    <p className="max-d">25°</p>
+                    <p className="min-d">13°</p>
+                  </div>
+                </article>
+
+                <article>
+                  <h3>Sat</h3>
+                  <img src={iconStorm} alt="Storm" />
+                  <div className="dregres-range">
+                    <p className="max-d">21°</p>
+                    <p className="min-d">15°</p>
+                  </div>
+                </article>
+
+                <article>
+                  <h3>Sun</h3>
+                  <img src={iconSnow} alt="Snow" />
+                  <div className="dregres-range">
+                    <p className="max-d">25°</p>
+                    <p className="min-d">16°</p>
+                  </div>
+                </article>
+
+                <article>
+                  <h3>Mon</h3>
+                  <img src={iconFog} alt="Fog" />
+                  <div className="dregres-range">
+                    <p className="max-d">24°</p>
+                    <p className="min-d">15°</p>
+                  </div>
+                </article>
+              </>
+            )}
           </div>
         </section>
 
@@ -490,52 +631,58 @@ function App() {
               </button>
             </section>
           </div>
-          <ul className="hours-list">
-            <li className="time-3pm">
-              <img src={iconOvercast} alt="cloud icon" />
-              <p className="hour">3 PM</p>
-              <p className="deagree">20°</p>
-            </li>
-            <li className="time-4pm">
-              <img src={iconPartlyCloudy} alt="A sun with a cloud icon" />
-              <p className="hour">4 PM</p>
-              <p className="deagree">20°</p>
-            </li>
-            <li className="time-5pm">
-              <img src={iconSunny} alt="Sun Icon" />
-              <p className="hour">5 PM</p>
-              <p className="deagree">20°</p>
-            </li>
-            <li className="time-6pm">
-              <img src={iconOvercast} alt="Cloud icon" />
-              <p className="hour">6 PM</p>
-              <p className="deagree">19°</p>
-            </li>
-            <li className="time-7pm">
-              <img src={iconSnow} alt="Snow icon" />
-              <p className="hour">7 PM</p>
-              <p className="deagree">18°</p>
-            </li>
-            <li className="time-8pm">
-              <img src={iconFog} alt="Fog icon" />
-              <p className="hour">8 PM</p>
-              <p className="deagree">18°</p>
-            </li>
-            <li className="time-9pm">
-              <img src={iconSnow} alt="Snow icon" />
-              <p className="hour">9 PM</p>
-              <p className="deagree">17°</p>
-            </li>
-            <li className="time-10pm">
-              <img src={iconOvercast} alt="Cloud Icon" />
-              <p className="hour">10 PM</p>
-              <p className="deagree">17°</p>
-            </li>
-          </ul>
+          {weatherData.location ? (
+            <HourlyForecast
+              weatherData={weatherData}
+              selectedDay={weatherData.daily?.time[0]}
+            />
+          ) : (
+            <ul className="hours-list">
+              <li className="time-3pm">
+                <img src={iconOvercast} alt="cloud icon" />
+                <p className="hour">3 PM</p>
+                <p className="deagree">20°</p>
+              </li>
+              <li className="time-4pm">
+                <img src={iconPartlyCloudy} alt="A sun with a cloud icon" />
+                <p className="hour">4 PM</p>
+                <p className="deagree">20°</p>
+              </li>
+              <li className="time-5pm">
+                <img src={iconSunny} alt="Sun Icon" />
+                <p className="hour">5 PM</p>
+                <p className="deagree">20°</p>
+              </li>
+              <li className="time-6pm">
+                <img src={iconOvercast} alt="Cloud icon" />
+                <p className="hour">6 PM</p>
+                <p className="deagree">19°</p>
+              </li>
+              <li className="time-7pm">
+                <img src={iconSnow} alt="Snow icon" />
+                <p className="hour">7 PM</p>
+                <p className="deagree">18°</p>
+              </li>
+              <li className="time-8pm">
+                <img src={iconFog} alt="Fog icon" />
+                <p className="hour">8 PM</p>
+                <p className="deagree">18°</p>
+              </li>
+              <li className="time-9pm">
+                <img src={iconSnow} alt="Snow icon" />
+                <p className="hour">9 PM</p>
+                <p className="deagree">17°</p>
+              </li>
+              <li className="time-10pm">
+                <img src={iconOvercast} alt="Cloud Icon" />
+                <p className="hour">10 PM</p>
+                <p className="deagree">17°</p>
+              </li>
+            </ul>
+          )}
         </section>
       </main>
     </>
   );
 }
-
 export default App;

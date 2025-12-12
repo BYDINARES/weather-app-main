@@ -336,6 +336,7 @@ html body #root main section.daily-forecast div article div.dregres-range {
 }
 html body #root main section.daily-forecast div article div.dregres-range p {
   margin: 0%;
+  font-size: 0.8rem;
 }
 html body #root main section.hourly-forecast {
   height: 32%;
@@ -382,7 +383,7 @@ html body #root main section.hourly-forecast ul.hours-list li {
   display: flex;
   flex-direction: row;
   align-items: center;
-  height: 9.5%;
+  height: 7.5%;
   width: 100%;
   box-sizing: border-box;
   padding-left: 5%;
@@ -393,8 +394,8 @@ html body #root main section.hourly-forecast ul.hours-list li {
   border: solid 0.5px rgb(73, 73, 73);
 }
 html body #root main section.hourly-forecast ul.hours-list li > img {
-  width: 15%;
-  height: 90%;
+  width: 13%;
+  height: 95%;
 }
 html body #root main section.hourly-forecast ul.hours-list li > p.hour {
   width: 20%;

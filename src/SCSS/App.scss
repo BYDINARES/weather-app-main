@@ -369,6 +369,7 @@ html {
                 //general <p>
                 p {
                   margin: 0%;
+                  font-size: 0.8rem;
                 }
 
                 // p.max-d {
@@ -425,7 +426,7 @@ html {
               display: flex;
               flex-direction: row;
               align-items: center;
-              height: 9.5%;
+              height: 7.5%;
               width: 100%;
               box-sizing: border-box;
 
@@ -438,8 +439,8 @@ html {
               border: solid 0.5px rgb(73, 73, 73);
 
               > img {
-                width: 15%;
-                height: 90%;
+                width: 13%;
+                height: 95%;
               }
               > p.hour {
                 width: 20%;
