@@ -8,12 +8,12 @@ import weatherNowLogo from "./images/logo.svg";
 import checkMark from "./images/icon-checkmark.svg";
 import iconDrizzle from "./images/icon-drizzle.webp";
 import iconDropdown from "./images/icon-dropdown.svg"; //<==========
-import iconError from "./images/icon-error.svg";
+// import iconError from "./images/icon-error.svg";
 import iconFog from "./images/icon-fog.webp";
-import iconLoading from "./images/icon-loading.svg";
+// import iconLoading from "./images/icon-loading.svg";
 import iconSearch from "./images/icon-search.svg";
 
-import iconRetry from "./images/icon-retry.svg";
+// import iconRetry from "./images/icon-retry.svg";
 import iconUnits from "./images/icon-units.svg";
 //Forcast icons
 import iconOvercast from "./images/icon-overcast.webp";
@@ -38,6 +38,9 @@ function App() {
   //Search nav
   const [weatherData, setWeatherData] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
+
+  //Hourly dropdown
+  const [openHourlyDropdown, setOpenHourlyDropdown] = useState(false);
 
   //======== Efects =======
   useEffect(() => {
@@ -204,11 +207,11 @@ function App() {
     }
 
     // Always return exactly 10 hours
-    const next10 = hourly.slice(startIndex, startIndex + 10);
+    const next8 = hourly.slice(startIndex, startIndex + 8);
 
     return (
       <ul className="hours-list">
-        {next10.map((h, i) => {
+        {next8.map((h, i) => {
           const hr = h.date.getHours();
           const label =
             hr === 0
@@ -629,6 +632,55 @@ function App() {
                 Tuesday
                 <img src={iconDropdown} alt="Dropdown icon" />
               </button>
+              {weatherData.location ? (
+                weatherData.daily.time.map((day) => {
+                  const date = new Date(day);
+                  const weekday = date.toLocaleDateString("en-US", {
+                    weekday: "long",
+                  });
+
+                  return (
+                    <label>
+                      <input key={day} />
+                      {weekday}
+                    </label>
+                  );
+                })
+              ) : (
+                <article className="hourly-dropdown">
+                  <ul>
+                    <div>
+                      <label>
+                        <input name="day-forecast" id="day-1" type="radio" />
+                      </label>
+                    </div>
+                    <div>
+                      <label htmlFor=""></label>
+                      <input name="day-forecast" id="day-2" type="radio" />
+                    </div>
+                    <div>
+                      <label htmlFor=""></label>
+                      <input name="day-forecast" id="day-3" type="radio" />
+                    </div>
+                    <div>
+                      <label htmlFor=""></label>
+                      <input name="day-forecast" id="day-4" type="radio" />
+                    </div>
+                    <div>
+                      <label htmlFor=""></label>
+                      <input name="day-forecast" id="day-5" type="radio" />
+                    </div>
+                    <div>
+                      <label htmlFor=""></label>
+                      <input name="day-forecast" id="day-6" type="radio" />
+                    </div>
+                    <div>
+                      <label htmlFor=""></label>
+                      <input name="day-forecast" id="day-7" type="radio" />
+                    </div>
+                  </ul>
+                </article>
+              )}
             </section>
           </div>
           {weatherData.location ? (

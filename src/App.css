@@ -383,7 +383,7 @@ html body #root main section.hourly-forecast ul.hours-list li {
   display: flex;
   flex-direction: row;
   align-items: center;
-  height: 7.5%;
+  height: 9.5%;
   width: 100%;
   box-sizing: border-box;
   padding-left: 5%;
