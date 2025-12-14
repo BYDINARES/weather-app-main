@@ -41,6 +41,7 @@ function App() {
 
   //Hourly dropdown
   const [openHourlyDropdown, setOpenHourlyDropdown] = useState(false);
+  const [selectedDay, setSelectedDay] = useState(null);
 
   //======== Efects =======
   useEffect(() => {
@@ -628,58 +629,42 @@ function App() {
           <div className="top-pick-a-day">
             <h2>Hourly forecast</h2>
             <section className="dropdown-day">
-              <button>
-                Tuesday
+              <button onClick={() => setOpenHourlyDropdown((prev) => !prev)}>
+                {selectedDay ? getWeekday(selectedDay) : "Today"}
                 <img src={iconDropdown} alt="Dropdown icon" />
               </button>
-              {weatherData.location ? (
-                weatherData.daily.time.map((day) => {
-                  const date = new Date(day);
-                  const weekday = date.toLocaleDateString("en-US", {
-                    weekday: "long",
-                  });
 
-                  return (
-                    <label>
-                      <input key={day} />
-                      {weekday}
-                    </label>
-                  );
-                })
-              ) : (
-                <article className="hourly-dropdown">
-                  <ul>
-                    <div>
-                      <label>
-                        <input name="day-forecast" id="day-1" type="radio" />
-                      </label>
-                    </div>
-                    <div>
-                      <label htmlFor=""></label>
-                      <input name="day-forecast" id="day-2" type="radio" />
-                    </div>
-                    <div>
-                      <label htmlFor=""></label>
-                      <input name="day-forecast" id="day-3" type="radio" />
-                    </div>
-                    <div>
-                      <label htmlFor=""></label>
-                      <input name="day-forecast" id="day-4" type="radio" />
-                    </div>
-                    <div>
-                      <label htmlFor=""></label>
-                      <input name="day-forecast" id="day-5" type="radio" />
-                    </div>
-                    <div>
-                      <label htmlFor=""></label>
-                      <input name="day-forecast" id="day-6" type="radio" />
-                    </div>
-                    <div>
-                      <label htmlFor=""></label>
-                      <input name="day-forecast" id="day-7" type="radio" />
-                    </div>
-                  </ul>
-                </article>
+              {openHourlyDropdown && weatherData.location && (
+                <section className="dropdown-container">
+                  {weatherData.daily.time
+                    .map((day) => new Date(day))
+                    .filter((date) => {
+                      const today = new Date();
+                      today.setHours(0, 0, 0, 0);
+                      return date >= today;
+                    })
+                    .map((date) => {
+                      const dayISO = date.toISOString().split("T")[0];
+                      const weekday = date.toLocaleDateString("en-US", {
+                        weekday: "long",
+                      });
+
+                      return (
+                        <label key={dayISO} className="day-option">
+                          <span>{weekday}</span>
+                          <input
+                            type="radio"
+                            name="day-option"
+                            checked={selectedDay === dayISO}
+                            onChange={() => {
+                              setSelectedDay(dayISO);
+                              setOpenHourlyDropdown(false);
+                            }}
+                          />
+                        </label>
+                      );
+                    })}
+                </section>
               )}
             </section>
           </div>
