@@ -24,10 +24,14 @@ import iconStorm from "./images/icon-storm.webp";
 import iconSunny from "./images/icon-sunny.webp";
 
 function App() {
-  const [openDropdown, setOpenDropdown] = useState(false);
-  const [isRendered, setIsRendered] = useState(false);
+  //======== STATES ==========
+  //loading
+  const [isLoading, setIsLoading] = useState(false);
+  const [clicked, setClicked] = useState(false);
 
   //dropdown
+  const [openDropdown, setOpenDropdown] = useState(false);
+  const [isRendered, setIsRendered] = useState(false);
   const [dropdownOptions, setDropdownOptions] = useState({
     temperature: "celsius",
     windSpeed: "km/h",
@@ -41,6 +45,7 @@ function App() {
 
   //Hourly dropdown
   const [openHourlyDropdown, setOpenHourlyDropdown] = useState(false);
+  const [isRenderedHour, setIsRenderedHour] = useState(false);
   const [selectedDay, setSelectedDay] = useState(null);
 
   //======== Efects =======
@@ -61,6 +66,17 @@ function App() {
       fetchData(searchQuery, dropdownOptions);
     }
   }, [dropdownOptions]);
+
+  useEffect(() => {
+    if (openHourlyDropdown) {
+      setIsRenderedHour(true);
+    } else {
+      const timer = setTimeout(() => {
+        setIsRenderedHour(false);
+      }, 200);
+      return () => clearTimeout(timer);
+    }
+  }, [openHourlyDropdown]);
 
   //======== functions ==========
 
@@ -111,29 +127,26 @@ function App() {
 
   async function fetchData(query, units) {
     try {
-      // Convert dropdown units to API-friendly format
+      setIsLoading(true); // ⬅️ start loading
+
       const unitParams = buildUnitParams(units);
 
-      // 1. Search the location
       const geoRes = await fetch(
         `https://geocoding-api.open-meteo.com/v1/search?name=${query}`
       );
       const geoData = await geoRes.json();
 
       if (!geoData.results || geoData.results.length === 0) {
-        console.error("No results found");
-        return;
+        throw new Error("No results");
       }
 
       const { latitude, longitude, name, country } = geoData.results[0];
 
-      // 2. Create FULL weather request with unit options
       const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,wind_speed_10m,relative_humidity_2m,precipitation&hourly=temperature_2m,precipitation,weather_code&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weather_code&forecast_days=8&temperature_unit=${unitParams.temperature}&wind_speed_unit=${unitParams.wind}&precipitation_unit=${unitParams.precipitation}&timezone=auto`;
 
       const weatherRes = await fetch(url);
       const weather = await weatherRes.json();
 
-      // 3. Store everything for rendering
       setWeatherData({
         location: `${name}, ${country}`,
         current: weather.current,
@@ -141,7 +154,9 @@ function App() {
         daily: weather.daily,
       });
     } catch (err) {
-      console.error("Failed to fetch weather:", err);
+      console.error(err);
+    } finally {
+      setIsLoading(false); // ⬅️ stop loading
     }
   }
 
@@ -634,8 +649,14 @@ function App() {
                 <img src={iconDropdown} alt="Dropdown icon" />
               </button>
 
-              {openHourlyDropdown && weatherData.location && (
-                <section className="dropdown-container">
+              {isRenderedHour && weatherData.location && (
+                <section
+                  className={
+                    openHourlyDropdown
+                      ? "dropdown-container enter"
+                      : "dropdown-container fade"
+                  }
+                >
                   {weatherData.daily.time
                     .map((day) => new Date(day))
                     .filter((date) => {

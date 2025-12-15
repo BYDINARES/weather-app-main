@@ -373,6 +373,7 @@ html body #root main section.hourly-forecast div.top-pick-a-day section.dropdown
   font-size: 0.9rem;
   border: none;
   border-radius: 5px;
+  cursor: pointer;
 }
 html body #root main section.hourly-forecast div.top-pick-a-day section.dropdown-day section.dropdown-container {
   position: absolute;
@@ -386,13 +387,21 @@ html body #root main section.hourly-forecast div.top-pick-a-day section.dropdown
 html body #root main section.hourly-forecast div.top-pick-a-day section.dropdown-day section.dropdown-container > label {
   width: 100%;
   display: flex;
-  flex-direction: row-reverse;
+  flex-direction: row;
   justify-content: space-between;
   margin-bottom: 5%;
 }
 html body #root main section.hourly-forecast div.top-pick-a-day section.dropdown-day section.dropdown-container > label input {
   width: 20%;
   box-sizing: border-box;
+}
+html body #root main section.hourly-forecast div.top-pick-a-day section.dropdown-day section.dropdown-container.enter {
+  transform: translateY(-10px);
+  animation: dropdownFade 0.2s ease-in-out forwards;
+}
+html body #root main section.hourly-forecast div.top-pick-a-day section.dropdown-day section.dropdown-container.fade {
+  transform: translateY(0px);
+  animation: dropdownFadeOut 0.2s ease-in-out forwards;
 }
 html body #root main section.hourly-forecast ul.hours-list {
   height: 90%;
