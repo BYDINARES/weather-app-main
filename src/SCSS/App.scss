@@ -248,11 +248,46 @@ html {
           }
         }
       }
+
+      //================ THE MAIN =====================
       main {
         display: flex;
         flex-direction: column;
         height: 80%;
 
+        .loading-container {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          min-height: 260px;
+
+          .loading-card {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 40px 60px;
+            border-radius: 16px;
+            text-align: center;
+            color: white;
+
+            .dot {
+              display: inline-block;
+              width: 8px;
+              height: 8px;
+              margin: 0 4px;
+              background: white;
+              border-radius: 50%;
+              animation: bounce 1.4s infinite ease-in-out both;
+            }
+
+            .dot:nth-child(1) {
+              animation-delay: -0.32s;
+            }
+            .dot:nth-child(2) {
+              animation-delay: -0.16s;
+            }
+          }
+        }
+
+        //================ The Regular code
         section.bg-today {
           background-image: url("/public/bg-today-small.svg");
           background-size: cover;
@@ -324,7 +359,7 @@ html {
             }
             p {
               margin: 0%;
-              font-size: 2rem;
+              font-size: 1.9rem;
               margin-top: 15%;
             }
           }
@@ -397,15 +432,15 @@ html {
               font-size: 1rem;
             }
             section.dropdown-day {
-              width: 38%;
+              width: 42%;
               button {
                 display: flex;
                 flex-direction: row;
                 justify-content: space-between;
                 box-sizing: border-box;
                 width: 100%;
-                padding-left: 13%;
-                padding-right: 13%;
+                padding-left: 10%;
+                padding-right: 10%;
                 padding-top: 5%;
                 padding-bottom: 5%;
 
@@ -437,6 +472,7 @@ html {
                   input {
                     width: 20%;
                     box-sizing: border-box;
+                    display: none;
                   }
                 }
               }
@@ -481,8 +517,8 @@ html {
                 text-align: center;
               }
               > p.deagree {
-                margin-left: auto;
                 margin: 0%;
+                margin-left: auto;
               }
             }
           }

@@ -225,6 +225,34 @@ html body #root main {
   flex-direction: column;
   height: 80%;
 }
+html body #root main .loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 260px;
+}
+html body #root main .loading-container .loading-card {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 40px 60px;
+  border-radius: 16px;
+  text-align: center;
+  color: white;
+}
+html body #root main .loading-container .loading-card .dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin: 0 4px;
+  background: white;
+  border-radius: 50%;
+  animation: bounce 1.4s infinite ease-in-out both;
+}
+html body #root main .loading-container .loading-card .dot:nth-child(1) {
+  animation-delay: -0.32s;
+}
+html body #root main .loading-container .loading-card .dot:nth-child(2) {
+  animation-delay: -0.16s;
+}
 html body #root main section.bg-today {
   background-image: url("/public/bg-today-small.svg");
   background-size: cover;
@@ -293,7 +321,7 @@ html body #root main section.general-forecast article h3 {
 }
 html body #root main section.general-forecast article p {
   margin: 0%;
-  font-size: 2rem;
+  font-size: 1.9rem;
   margin-top: 15%;
 }
 html body #root main section.daily-forecast {
@@ -356,7 +384,7 @@ html body #root main section.hourly-forecast div.top-pick-a-day h2 {
   font-size: 1rem;
 }
 html body #root main section.hourly-forecast div.top-pick-a-day section.dropdown-day {
-  width: 38%;
+  width: 42%;
 }
 html body #root main section.hourly-forecast div.top-pick-a-day section.dropdown-day button {
   display: flex;
@@ -364,8 +392,8 @@ html body #root main section.hourly-forecast div.top-pick-a-day section.dropdown
   justify-content: space-between;
   box-sizing: border-box;
   width: 100%;
-  padding-left: 13%;
-  padding-right: 13%;
+  padding-left: 10%;
+  padding-right: 10%;
   padding-top: 5%;
   padding-bottom: 5%;
   background-color: rgb(69, 65, 102);
@@ -394,6 +422,7 @@ html body #root main section.hourly-forecast div.top-pick-a-day section.dropdown
 html body #root main section.hourly-forecast div.top-pick-a-day section.dropdown-day section.dropdown-container > label input {
   width: 20%;
   box-sizing: border-box;
+  display: none;
 }
 html body #root main section.hourly-forecast div.top-pick-a-day section.dropdown-day section.dropdown-container.enter {
   transform: translateY(-10px);
@@ -432,8 +461,8 @@ html body #root main section.hourly-forecast ul.hours-list li > p.hour {
   text-align: center;
 }
 html body #root main section.hourly-forecast ul.hours-list li > p.deagree {
-  margin-left: auto;
   margin: 0%;
+  margin-left: auto;
 }
 
 @font-face {
@@ -463,6 +492,14 @@ html body #root main section.hourly-forecast ul.hours-list li > p.deagree {
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
+}
+@keyframes bounce {
+  0%, 80%, 100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
 }
 @keyframes dropdownFade {
   from {
