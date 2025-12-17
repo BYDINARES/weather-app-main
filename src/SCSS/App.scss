@@ -413,6 +413,9 @@ html {
                 // }
               }
             }
+            article.empty-days {
+              height: 35%;
+            }
           }
         }
         section.hourly-forecast {
@@ -520,6 +523,10 @@ html {
                 margin: 0%;
                 margin-left: auto;
               }
+            }
+            li.empty-container {
+              height: 9.5%;
+              width: 100%;
             }
           }
         }

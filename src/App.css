@@ -366,6 +366,9 @@ html body #root main section.daily-forecast div article div.dregres-range p {
   margin: 0%;
   font-size: 0.8rem;
 }
+html body #root main section.daily-forecast div article.empty-days {
+  height: 35%;
+}
 html body #root main section.hourly-forecast {
   height: 32%;
   background-color: rgb(41, 39, 65);
@@ -463,6 +466,10 @@ html body #root main section.hourly-forecast ul.hours-list li > p.hour {
 html body #root main section.hourly-forecast ul.hours-list li > p.deagree {
   margin: 0%;
   margin-left: auto;
+}
+html body #root main section.hourly-forecast ul.hours-list li.empty-container {
+  height: 9.5%;
+  width: 100%;
 }
 
 @font-face {

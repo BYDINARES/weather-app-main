@@ -122,7 +122,7 @@ function App() {
     return {
       temperature: opts.temperature === "celsius" ? "celsius" : "fahrenheit",
       wind: opts.windSpeed === "km/h" ? "kmh" : "mph",
-      precipitation: opts.precipitation, // "mm" or "in"
+      precipitation: opts.precipitation === "mm" ? "mm" : "inch", // "mm" or "in"
     };
   }
 
@@ -195,7 +195,15 @@ function App() {
   };
 
   function HourlyForecast({ weatherData, selectedDay }) {
-    if (!weatherData || !weatherData.hourly) return null;
+    if (!weatherData?.hourly?.time) {
+      return (
+        <div>
+          <p className="" style={{ padding: 16 }}>
+            Loading hours...
+          </p>
+        </div>
+      );
+    }
 
     // Build hourly objects
     const hourly = weatherData.hourly.time.map((t, i) => ({
@@ -496,41 +504,48 @@ function App() {
 
       {/* ========= The MAIN ========= */}
       <main>
-        {isLoading ? (
-          <LoadingSkeleton />
-        ) : (
-          <>
-            {/* forcast of today */}
-            <section className="bg-today">
-              <h3 className="city-country">
-                {weatherData.location
-                  ? weatherData.location
-                  : "Berlin, Germany"}
-              </h3>
-              <p className="date">
-                {weatherData.location
-                  ? (() => {
-                      const d = new Date();
-                      return `${d.toLocaleDateString("en-US", {
-                        weekday: "long",
-                      })}, ${d.toLocaleDateString("en-US", {
-                        month: "short",
-                      })} ${d.getDate()} ${d.getFullYear()}`;
-                    })()
-                  : "Tuesday, Aug 5 2025"}
-              </p>
-              <img src={iconSunny} alt="A sun icon" />
-              <h1 className="degree">
-                {weatherData.current
-                  ? `${Math.round(weatherData.current.temperature_2m)}°`
-                  : "20°"}
-              </h1>
-            </section>
+        <>
+          {/* forcast of today */}
+          <section className="bg-today">
+            {isLoading ? (
+              <LoadingSkeleton />
+            ) : (
+              <>
+                {" "}
+                <h3 className="city-country">
+                  {weatherData.location
+                    ? weatherData.location
+                    : "Berlin, Germany"}
+                </h3>
+                <p className="date">
+                  {weatherData.location
+                    ? (() => {
+                        const d = new Date();
+                        return `${d.toLocaleDateString("en-US", {
+                          weekday: "long",
+                        })}, ${d.toLocaleDateString("en-US", {
+                          month: "short",
+                        })} ${d.getDate()} ${d.getFullYear()}`;
+                      })()
+                    : "Tuesday, Aug 5 2025"}
+                </p>
+                <img src={iconSunny} alt="A sun icon" />
+                <h1 className="degree">
+                  {weatherData.current
+                    ? `${Math.round(weatherData.current.temperature_2m)}°`
+                    : "20°"}
+                </h1>
+              </>
+            )}
+          </section>
 
-            {/* The 4 general forecats */}
-            <section className="general-forecast">
-              <article className="feels-like">
-                <h3>Feels Like</h3>
+          {/* The 4 general forecats */}
+          <section className="general-forecast">
+            <article className="feels-like">
+              <h3>Feels Like</h3>
+              {isLoading ? (
+                <p>-</p>
+              ) : (
                 <p>
                   {weatherData.current ? (
                     `${Math.round(weatherData.current.apparent_temperature)}°`
@@ -540,10 +555,14 @@ function App() {
                     </>
                   )}
                 </p>
-              </article>
+              )}
+            </article>
 
-              <article className="humidity">
-                <h3>Humidity</h3>
+            <article className="humidity">
+              <h3>Humidity</h3>
+              {isLoading ? (
+                <p>-</p>
+              ) : (
                 <p>
                   {weatherData.current ? (
                     `${weatherData.current.relative_humidity_2m}%`
@@ -553,10 +572,14 @@ function App() {
                     </>
                   )}
                 </p>
-              </article>
+              )}
+            </article>
 
-              <article className="wind">
-                <h3>Wind</h3>
+            <article className="wind">
+              <h3>Wind</h3>
+              {isLoading ? (
+                <p>-</p>
+              ) : (
                 <p>
                   {weatherData.current ? (
                     `${Math.round(weatherData.current.wind_speed_10m)} ${
@@ -568,10 +591,14 @@ function App() {
                     </>
                   )}
                 </p>
-              </article>
+              )}
+            </article>
 
-              <article className="precipitation">
-                <h3>Precipitation</h3>
+            <article className="precipitation">
+              <h3>Precipitation</h3>
+              {isLoading ? (
+                <p>-</p>
+              ) : (
                 <p>
                   {weatherData.current ? (
                     `${weatherData.current.precipitation} ${dropdownOptions.precipitation}`
@@ -581,233 +608,135 @@ function App() {
                     </>
                   )}
                 </p>
-              </article>
-            </section>
-
-            {/* The forecat for the week REMEMBER THAT THIS SECTION CONSIDERS ONE WEEK FROM THE DAY YOU DID FORECAST*/}
-            <section className="daily-forecast">
-              <h2>Daily forecast</h2>
-
-              <div>
-                {weatherData.daily ? (
-                  weatherData.daily.time
-                    .map((day, i) => ({
-                      date: new Date(day),
-                      code: weatherData.daily.weather_code[i],
-                      max: weatherData.daily.temperature_2m_max[i],
-                      min: weatherData.daily.temperature_2m_min[i],
-                    }))
-                    .filter((item) => {
-                      // keep ONLY today and the future
-                      const today = new Date();
-                      today.setHours(0, 0, 0, 0);
-                      return item.date >= today;
-                    })
-                    .slice(0, 7) // ensure EXACTLY 7 days
-                    .map((item, i) => {
-                      const weekday = item.date.toLocaleDateString("en-US", {
-                        weekday: "short",
-                      });
-
-                      return (
-                        <article key={i}>
-                          <h3>{weekday}</h3>
-
-                          <img
-                            src={weatherIcons[item.code] || iconOvercast}
-                            alt="Weather icon"
-                          />
-
-                          <div className="dregres-range">
-                            <p className="max-d">{item.max}°</p>
-                            <p className="min-d">{item.min}°</p>
-                          </div>
-                        </article>
-                      );
-                    })
-                ) : (
-                  // ===== fallback UI before search =====
-                  <>
-                    <article>
-                      <h3>Tue</h3>
-                      <img src={iconRain} alt="Rain" />
-                      <div className="dregres-range">
-                        <p className="max-d">20°</p>
-                        <p className="min-d">14°</p>
-                      </div>
-                    </article>
-
-                    <article>
-                      <h3>Wed</h3>
-                      <img src={iconDrizzle} alt="Drizzle" />
-                      <div className="dregres-range">
-                        <p className="max-d">21°</p>
-                        <p className="min-d">15°</p>
-                      </div>
-                    </article>
-
-                    <article>
-                      <h3>Thu</h3>
-                      <img src={iconSunny} alt="Sunny" />
-                      <div className="dregres-range">
-                        <p className="max-d">24°</p>
-                        <p className="min-d">14°</p>
-                      </div>
-                    </article>
-
-                    <article>
-                      <h3>Fri</h3>
-                      <img src={iconPartlyCloudy} alt="Partly Cloudy" />
-                      <div className="dregres-range">
-                        <p className="max-d">25°</p>
-                        <p className="min-d">13°</p>
-                      </div>
-                    </article>
-
-                    <article>
-                      <h3>Sat</h3>
-                      <img src={iconStorm} alt="Storm" />
-                      <div className="dregres-range">
-                        <p className="max-d">21°</p>
-                        <p className="min-d">15°</p>
-                      </div>
-                    </article>
-
-                    <article>
-                      <h3>Sun</h3>
-                      <img src={iconSnow} alt="Snow" />
-                      <div className="dregres-range">
-                        <p className="max-d">25°</p>
-                        <p className="min-d">16°</p>
-                      </div>
-                    </article>
-
-                    <article>
-                      <h3>Mon</h3>
-                      <img src={iconFog} alt="Fog" />
-                      <div className="dregres-range">
-                        <p className="max-d">24°</p>
-                        <p className="min-d">15°</p>
-                      </div>
-                    </article>
-                  </>
-                )}
-              </div>
-            </section>
-
-            <section className="hourly-forecast">
-              <div className="top-pick-a-day">
-                <h2>Hourly forecast</h2>
-                <section className="dropdown-day">
-                  <button
-                    onClick={() => setOpenHourlyDropdown((prev) => !prev)}
-                  >
-                    {selectedDay ? getWeekday(selectedDay) : "Today"}
-                    <img src={iconDropdown} alt="Dropdown icon" />
-                  </button>
-
-                  {isRenderedHour && weatherData.location && (
-                    <section
-                      className={
-                        openHourlyDropdown
-                          ? "dropdown-container enter"
-                          : "dropdown-container fade"
-                      }
-                    >
-                      {weatherData.daily.time
-                        .map((day) => new Date(day))
-                        .filter((date) => {
-                          const today = new Date();
-                          today.setHours(0, 0, 0, 0);
-                          return date >= today;
-                        })
-                        .map((date) => {
-                          const dayISO = date.toISOString().split("T")[0];
-                          const weekday = date.toLocaleDateString("en-US", {
-                            weekday: "long",
-                          });
-
-                          return (
-                            <label key={dayISO} className="day-option">
-                              <span>{weekday}</span>
-                              <input
-                                type="radio"
-                                name="day-option"
-                                checked={selectedDay === dayISO}
-                                onChange={() => {
-                                  setSelectedDay(dayISO);
-                                  setOpenHourlyDropdown(false);
-                                }}
-                              />
-
-                              {selectedDay === dayISO ? (
-                                <img
-                                  src={checkMark}
-                                  alt="check mark"
-                                  className="full-img"
-                                />
-                              ) : (
-                                <span className="empty-img"></span>
-                              )}
-                            </label>
-                          );
-                        })}
-                    </section>
-                  )}
-                </section>
-              </div>
-              {weatherData.location ? (
-                <HourlyForecast
-                  weatherData={weatherData}
-                  selectedDay={selectedDay}
-                />
-              ) : (
-                <ul className="hours-list">
-                  <li className="time-3pm">
-                    <img src={iconOvercast} alt="cloud icon" />
-                    <p className="hour">3 PM</p>
-                    <p className="deagree">20°</p>
-                  </li>
-                  <li className="time-4pm">
-                    <img src={iconPartlyCloudy} alt="A sun with a cloud icon" />
-                    <p className="hour">4 PM</p>
-                    <p className="deagree">20°</p>
-                  </li>
-                  <li className="time-5pm">
-                    <img src={iconSunny} alt="Sun Icon" />
-                    <p className="hour">5 PM</p>
-                    <p className="deagree">20°</p>
-                  </li>
-                  <li className="time-6pm">
-                    <img src={iconOvercast} alt="Cloud icon" />
-                    <p className="hour">6 PM</p>
-                    <p className="deagree">19°</p>
-                  </li>
-                  <li className="time-7pm">
-                    <img src={iconSnow} alt="Snow icon" />
-                    <p className="hour">7 PM</p>
-                    <p className="deagree">18°</p>
-                  </li>
-                  <li className="time-8pm">
-                    <img src={iconFog} alt="Fog icon" />
-                    <p className="hour">8 PM</p>
-                    <p className="deagree">18°</p>
-                  </li>
-                  <li className="time-9pm">
-                    <img src={iconSnow} alt="Snow icon" />
-                    <p className="hour">9 PM</p>
-                    <p className="deagree">17°</p>
-                  </li>
-                  <li className="time-10pm">
-                    <img src={iconOvercast} alt="Cloud Icon" />
-                    <p className="hour">10 PM</p>
-                    <p className="deagree">17°</p>
-                  </li>
-                </ul>
               )}
-            </section>
-          </>
-        )}
+            </article>
+          </section>
+
+          {/* The forecat for the week REMEMBER THAT THIS SECTION CONSIDERS ONE WEEK FROM THE DAY YOU DID FORECAST*/}
+          <section className="daily-forecast">
+            <h2>Daily forecast</h2>
+
+            <div>
+              {weatherData.daily && !isLoading ? (
+                weatherData.daily.time
+                  .map((day, i) => ({
+                    date: new Date(day),
+                    code: weatherData.daily.weather_code[i],
+                    max: weatherData.daily.temperature_2m_max[i],
+                    min: weatherData.daily.temperature_2m_min[i],
+                  }))
+                  .filter((item) => {
+                    // keep ONLY today and the future
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    return item.date >= today;
+                  })
+                  .slice(0, 7) // ensure EXACTLY 7 days
+                  .map((item, i) => {
+                    const weekday = item.date.toLocaleDateString("en-US", {
+                      weekday: "short",
+                    });
+
+                    return (
+                      <article key={i}>
+                        <h3>{weekday}</h3>
+
+                        <img
+                          src={weatherIcons[item.code] || iconOvercast}
+                          alt="Weather icon"
+                        />
+
+                        <div className="dregres-range">
+                          <p className="max-d">{item.max}°</p>
+                          <p className="min-d">{item.min}°</p>
+                        </div>
+                      </article>
+                    );
+                  })
+              ) : (
+                // ===== fallback UI before search =====
+                <>
+                  {Array.from({ length: 7 }).map(() => (
+                    <article className="empty-days"></article>
+                  ))}
+                </>
+              )}
+            </div>
+          </section>
+
+          <section className="hourly-forecast">
+            <div className="top-pick-a-day">
+              <h2>Hourly forecast</h2>
+              <section className="dropdown-day">
+                <button onClick={() => setOpenHourlyDropdown((prev) => !prev)}>
+                  {selectedDay ? getWeekday(selectedDay) : "Today"}
+                  <img src={iconDropdown} alt="Dropdown icon" />
+                </button>
+
+                {isRenderedHour && weatherData.location && (
+                  <section
+                    className={
+                      openHourlyDropdown
+                        ? "dropdown-container enter"
+                        : "dropdown-container fade"
+                    }
+                  >
+                    {weatherData.daily.time
+                      .map((day) => new Date(day))
+                      .filter((date) => {
+                        const today = new Date();
+                        today.setHours(0, 0, 0, 0);
+                        return date >= today;
+                      })
+                      .map((date) => {
+                        const dayISO = date.toISOString().split("T")[0];
+                        const weekday = date.toLocaleDateString("en-US", {
+                          weekday: "long",
+                        });
+
+                        return (
+                          <label key={dayISO} className="day-option">
+                            <span>{weekday}</span>
+                            <input
+                              type="radio"
+                              name="day-option"
+                              checked={selectedDay === dayISO}
+                              onChange={() => {
+                                setSelectedDay(dayISO);
+                                setOpenHourlyDropdown(false);
+                              }}
+                            />
+
+                            {selectedDay === dayISO ? (
+                              <img
+                                src={checkMark}
+                                alt="check mark"
+                                className="full-img"
+                              />
+                            ) : (
+                              <span className="empty-img"></span>
+                            )}
+                          </label>
+                        );
+                      })}
+                  </section>
+                )}
+              </section>
+            </div>
+            {weatherData.location && !isLoading ? (
+              <HourlyForecast
+                weatherData={weatherData}
+                selectedDay={selectedDay}
+              />
+            ) : (
+              <ul className="hours-list">
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <li className="empty-container" key={i}></li>
+                ))}
+              </ul>
+            )}
+          </section>
+        </>
       </main>
     </>
   );
