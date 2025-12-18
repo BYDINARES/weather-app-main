@@ -193,6 +193,11 @@ function App() {
     96: iconStorm,
     99: iconStorm,
   };
+  //Today's icon
+  const todayIcon =
+    weatherData.current?.weather_code !== undefined
+      ? weatherIcons[weatherData.current.weather_code] || iconOvercast
+      : null;
 
   function HourlyForecast({ weatherData, selectedDay }) {
     if (!weatherData?.hourly?.time) {
@@ -506,16 +511,20 @@ function App() {
       <main>
         <>
           {/* forcast of today */}
-          <section className="bg-today">
+          <section
+            className={
+              !isLoading && weatherData.location
+                ? "bg-today"
+                : "bg-today loading"
+            }
+          >
             {isLoading ? (
               <LoadingSkeleton />
             ) : (
               <>
                 {" "}
                 <h3 className="city-country">
-                  {weatherData.location
-                    ? weatherData.location
-                    : "Berlin, Germany"}
+                  {weatherData.location ? weatherData.location : ""}
                 </h3>
                 <p className="date">
                   {weatherData.location
@@ -527,13 +536,12 @@ function App() {
                           month: "short",
                         })} ${d.getDate()} ${d.getFullYear()}`;
                       })()
-                    : "Tuesday, Aug 5 2025"}
+                    : ""}
                 </p>
-                <img src={iconSunny} alt="A sun icon" />
+                {todayIcon && <img src={todayIcon} alt="Weather icon" />}
                 <h1 className="degree">
-                  {weatherData.current
-                    ? `${Math.round(weatherData.current.temperature_2m)}°`
-                    : "20°"}
+                  {weatherData.current &&
+                    `${Math.round(weatherData.current.temperature_2m)}°`}
                 </h1>
               </>
             )}
@@ -551,7 +559,7 @@ function App() {
                     `${Math.round(weatherData.current.apparent_temperature)}°`
                   ) : (
                     <>
-                      <p>18°</p>
+                      <p>-</p>
                     </>
                   )}
                 </p>
@@ -568,7 +576,7 @@ function App() {
                     `${weatherData.current.relative_humidity_2m}%`
                   ) : (
                     <>
-                      <p>46%</p>
+                      <p>-</p>
                     </>
                   )}
                 </p>
@@ -587,7 +595,7 @@ function App() {
                     }`
                   ) : (
                     <>
-                      <p>14 km/h</p>
+                      <p>-</p>
                     </>
                   )}
                 </p>
@@ -604,7 +612,7 @@ function App() {
                     `${weatherData.current.precipitation} ${dropdownOptions.precipitation}`
                   ) : (
                     <>
-                      <p>0 mm</p>
+                      <p>-</p>
                     </>
                   )}
                 </p>
