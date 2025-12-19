@@ -15,7 +15,7 @@ html {
 
       header {
         height: 20%;
-        padding-bottom: 5%;
+        padding-bottom: 4%;
 
         nav {
           display: flex;
@@ -265,7 +265,8 @@ html {
           display: flex;
           justify-content: center;
           align-items: center;
-          min-height: 260px;
+          // min-height: 260px;
+          height: 90%;
 
           .loading-card {
             background: rgba(255, 255, 255, 0.08);

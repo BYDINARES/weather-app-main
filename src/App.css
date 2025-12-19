@@ -15,7 +15,7 @@ html body #root {
 }
 html body #root header {
   height: 20%;
-  padding-bottom: 5%;
+  padding-bottom: 4%;
 }
 html body #root header nav {
   display: flex;
@@ -232,7 +232,7 @@ html body #root main .loading-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 260px;
+  height: 90%;
 }
 html body #root main .loading-container .loading-card {
   background: rgba(255, 255, 255, 0.08);
@@ -530,9 +530,105 @@ html body #root main section.hourly-forecast ul.hours-list li.empty-container {
   }
 }
 @media (min-width: 992px) {
+  html {
+    font-size: 16px;
+    height: 70vw;
+  }
+  html body {
+    height: 100%;
+  }
   html body #root {
+    height: 100%;
     display: grid;
-    grid-template-areas: "header" "header" "main" "hourlyForecast";
+    grid-template-areas: "header header" "main main";
+    grid-template-columns: 70% 30%;
+    grid-template-rows: 30% 70%;
+  }
+  html body #root header {
+    grid-area: header;
+    height: 100%;
+    box-sizing: border-box;
+  }
+  html body #root header nav {
+    height: 20%;
+  }
+  html body #root header nav img {
+    height: 100%;
+    width: -moz-fit-content;
+    width: fit-content;
+  }
+  html body #root header h1.title {
+    font-size: 2.5rem;
+  }
+  html body #root header div.search-bar {
+    display: flex;
+    flex-direction: row;
+    width: 50%;
+    height: 30%;
+    margin-left: 25%;
+    margin-right: 25%;
+  }
+  html body #root header div.search-bar div.search-input {
+    height: 100%;
+    width: 80%;
+  }
+  html body #root header div.search-bar button.search {
+    height: 100%;
+    width: 30%;
+  }
+  html body #root main {
+    height: 100%;
+    grid-area: main;
+    display: grid;
+    grid-template-rows: 50% 25% 25%;
+    grid-template-columns: 60% 40%;
+  }
+  html body #root main > section {
+    box-sizing: border-box;
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+  html body #root main section.bg-today,
+  html body #root main section.bg-today.loading {
+    grid-column: 1/2;
+    grid-row: 1/2;
+    align-self: center;
+    box-sizing: border-box;
+    height: 90%;
+    width: 100%;
+  }
+  html body #root main section.general-forecast {
+    grid-column: 1/2;
+    grid-row: 2/3;
+    height: 90%;
+    width: 100%;
+    box-sizing: border-box;
+    flex-direction: row;
+  }
+  html body #root main section.general-forecast > article {
+    width: 20%;
+    height: 45%;
+  }
+  html body #root main section.daily-forecast {
+    grid-column: 1/2;
+    grid-row: 3;
+    height: 90%;
+    width: 90%;
+    box-sizing: border-box;
+  }
+  html body #root main section.daily-forecast div {
+    flex-wrap: nowrap;
+  }
+  html body #root main section.daily-forecast div article {
+    width: 10%;
+    height: 100%;
+  }
+  html body #root main section.hourly-forecast {
+    grid-column: 2;
+    grid-row: 1/4;
+    height: 90%;
+    width: 90%;
+    box-sizing: border-box;
   }
 }
 @keyframes bounce {
