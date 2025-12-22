@@ -654,7 +654,7 @@ function App() {
                           alt="Weather icon"
                         />
 
-                        <div className="dregres-range">
+                        <div className="degres-range">
                           <p className="max-d">{item.max}°</p>
                           <p className="min-d">{item.min}°</p>
                         </div>
