@@ -492,10 +492,26 @@ html {
 
                 > label {
                   width: 100%;
+                  box-sizing: border-box;
+
                   display: flex;
                   flex-direction: row;
                   justify-content: space-between;
+
                   margin-bottom: 5%;
+                  padding: 5%;
+
+                  border-radius: 5px;
+                  cursor: pointer;
+                  transition: all 0.5s ease;
+
+                  &:hover,
+                  &:focus-visible {
+                    background-color: rgb(82, 78, 119);
+                  }
+                  &:active {
+                    transform: scale(2);
+                  }
 
                   input {
                     width: 20%;

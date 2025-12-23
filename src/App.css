@@ -436,10 +436,21 @@ html body #root main section.hourly-forecast div.top-pick-a-day section.dropdown
 }
 html body #root main section.hourly-forecast div.top-pick-a-day section.dropdown-day section.dropdown-container > label {
   width: 100%;
+  box-sizing: border-box;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   margin-bottom: 5%;
+  padding: 5%;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.5s ease;
+}
+html body #root main section.hourly-forecast div.top-pick-a-day section.dropdown-day section.dropdown-container > label:hover, html body #root main section.hourly-forecast div.top-pick-a-day section.dropdown-day section.dropdown-container > label:focus-visible {
+  background-color: rgb(82, 78, 119);
+}
+html body #root main section.hourly-forecast div.top-pick-a-day section.dropdown-day section.dropdown-container > label:active {
+  transform: scale(2);
 }
 html body #root main section.hourly-forecast div.top-pick-a-day section.dropdown-day section.dropdown-container > label input {
   width: 20%;
@@ -552,6 +563,26 @@ html body #root main section.hourly-forecast ul.hours-list li.empty-container {
   html body #root header nav {
     height: 20%;
   }
+  html body #root header nav section.dropdown {
+    width: 12%;
+    height: 100%;
+  }
+  html body #root header nav section.dropdown button.dropdown-toggle {
+    font-size: 1.2rem;
+    width: 100%;
+    height: 100%;
+  }
+  html body #root header nav section.dropdown button.dropdown-toggle img.settings-icon {
+    height: 100%;
+    width: 40%;
+  }
+  html body #root header nav section.dropdown button.dropdown-toggle img.dropdown-icon {
+    width: 40%;
+  }
+  html body #root header nav section.dropdown div.dropdown-section {
+    width: 20%;
+    left: 72%;
+  }
   html body #root header nav img {
     height: 100%;
     width: -moz-fit-content;
@@ -563,24 +594,27 @@ html body #root main section.hourly-forecast ul.hours-list li.empty-container {
   html body #root header div.search-bar {
     display: flex;
     flex-direction: row;
-    width: 50%;
+    justify-content: center;
+    width: 100%;
     height: 30%;
-    margin-left: 25%;
-    margin-right: 25%;
+    gap: 2%;
   }
   html body #root header div.search-bar div.search-input {
     height: 100%;
-    width: 80%;
+    width: 35%;
+    padding-left: 2%;
+    padding-right: 2%;
   }
   html body #root header div.search-bar button.search {
     height: 100%;
-    width: 30%;
+    width: 10%;
+    margin: 0%;
   }
   html body #root main {
     height: 100%;
     grid-area: main;
     display: grid;
-    grid-template-rows: 50% 18% 32%;
+    grid-template-rows: 45% 20% 35%;
     grid-template-columns: 60% 40%;
   }
   html body #root main > section {
@@ -592,18 +626,18 @@ html body #root main section.hourly-forecast ul.hours-list li.empty-container {
   html body #root main section.bg-today.loading {
     grid-column: 1/2;
     grid-row: 1/2;
-    align-self: center;
+    align-self: baseline;
     box-sizing: border-box;
-    height: 90%;
     width: 100%;
   }
   html body #root main section.bg-today {
     background-image: url("/public/bg-today-large.svg");
     background-size: cover;
-    height: 80%;
+    height: 90%;
     display: grid;
     padding: 5%;
     margin: 0%;
+    margin-bottom: 5%;
     overflow: hidden;
     position: relative;
     grid-template-rows: 50% 50%;
@@ -705,6 +739,12 @@ html body #root main section.hourly-forecast ul.hours-list li.empty-container {
     width: 90%;
     margin-left: auto;
     box-sizing: border-box;
+  }
+  html body #root main section.hourly-forecast div.top-pick-a-day section.dropdown-day section.dropdown-container {
+    width: 15%;
+    padding: 1%;
+    left: 77.5%;
+    top: 36%;
   }
 }
 @keyframes bounce {

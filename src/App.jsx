@@ -16,6 +16,7 @@ import iconSearch from "./images/icon-search.svg";
 
 // import iconRetry from "./images/icon-retry.svg";
 import iconUnits from "./images/icon-units.svg";
+import iconError from "./images/icon-error.svg";
 //Forcast icons
 import iconOvercast from "./images/icon-overcast.webp";
 import iconPartlyCloudy from "./images/icon-partly-cloudy.webp";
@@ -29,6 +30,7 @@ function App() {
   //loading
   const [isLoading, setIsLoading] = useState(false);
   const [clicked, setClicked] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
   //dropdown
   const [openDropdown, setOpenDropdown] = useState(false);
@@ -128,7 +130,8 @@ function App() {
 
   async function fetchData(query, units) {
     try {
-      setIsLoading(true); // ⬅️ start loading
+      setIsLoading(true);
+      setHasError(false); // reset previous errors
 
       const unitParams = buildUnitParams(units);
 
@@ -138,20 +141,12 @@ function App() {
       const geoData = await geoRes.json();
 
       if (!geoData.results || geoData.results.length === 0) {
-        throw new Error("No results");
+        throw new Error("Location not found");
       }
 
       const { latitude, longitude, name, country } = geoData.results[0];
 
-      const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}
-&current=temperature_2m,apparent_temperature,wind_speed_10m,relative_humidity_2m,precipitation,weather_code
-&hourly=temperature_2m,weather_code
-&daily=weather_code,temperature_2m_max,temperature_2m_min
-&forecast_days=8
-&temperature_unit=${unitParams.temperature}
-&wind_speed_unit=${unitParams.wind}
-&precipitation_unit=${unitParams.precipitation}
-&timezone=auto`;
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m,precipitation&hourly=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&temperature_unit=${unitParams.temperature}&wind_speed_unit=${unitParams.wind}&precipitation_unit=${unitParams.precipitation}&timezone=auto`;
 
       const weatherRes = await fetch(url);
       const weather = await weatherRes.json();
@@ -164,8 +159,10 @@ function App() {
       });
     } catch (err) {
       console.error(err);
+      setHasError(true);
+      setWeatherData({});
     } finally {
-      setIsLoading(false); // ⬅️ stop loading
+      setIsLoading(false);
     }
   }
 
@@ -508,244 +505,252 @@ function App() {
       </header>
 
       {/* ========= The MAIN ========= */}
-      <main>
-        <>
-          {/* forcast of today */}
-          <section
-            className={
-              !isLoading && weatherData.location
-                ? "bg-today"
-                : "bg-today loading"
-            }
-          >
-            {isLoading ? (
-              <LoadingSkeleton />
-            ) : (
-              <>
-                {" "}
-                <h3 className="city-country">
-                  {weatherData.location ? weatherData.location : ""}
-                </h3>
-                <p className="date">
-                  {weatherData.location
-                    ? (() => {
-                        const d = new Date();
-                        return `${d.toLocaleDateString("en-US", {
-                          weekday: "long",
-                        })}, ${d.toLocaleDateString("en-US", {
-                          month: "short",
-                        })} ${d.getDate()} ${d.getFullYear()}`;
-                      })()
-                    : ""}
-                </p>
-                {todayIcon && <img src={todayIcon} alt="Weather icon" />}
-                <h1 className="degree">
-                  {weatherData.current &&
-                    `${Math.round(weatherData.current.temperature_2m)}°`}
-                </h1>
-              </>
-            )}
-          </section>
-
-          {/* The 4 general forecats */}
-          <section className="general-forecast">
-            <article className="feels-like">
-              <h3>Feels Like</h3>
+      {hasError && !isLoading ? (
+        <section className="error-page">
+          <img src={iconError} alt="An Icon Error" />
+        </section>
+      ) : (
+        <main>
+          <>
+            {/* forcast of today */}
+            <section
+              className={
+                !isLoading && weatherData.location
+                  ? "bg-today"
+                  : "bg-today loading"
+              }
+            >
               {isLoading ? (
-                <p>-</p>
+                <LoadingSkeleton />
               ) : (
-                <p>
-                  {weatherData.current ? (
-                    `${Math.round(weatherData.current.apparent_temperature)}°`
-                  ) : (
-                    <>
-                      <p>-</p>
-                    </>
-                  )}
-                </p>
-              )}
-            </article>
-
-            <article className="humidity">
-              <h3>Humidity</h3>
-              {isLoading ? (
-                <p>-</p>
-              ) : (
-                <p>
-                  {weatherData.current ? (
-                    `${weatherData.current.relative_humidity_2m}%`
-                  ) : (
-                    <>
-                      <p>-</p>
-                    </>
-                  )}
-                </p>
-              )}
-            </article>
-
-            <article className="wind">
-              <h3>Wind</h3>
-              {isLoading ? (
-                <p>-</p>
-              ) : (
-                <p>
-                  {weatherData.current ? (
-                    `${Math.round(weatherData.current.wind_speed_10m)} ${
-                      dropdownOptions.windSpeed
-                    }`
-                  ) : (
-                    <>
-                      <p>-</p>
-                    </>
-                  )}
-                </p>
-              )}
-            </article>
-
-            <article className="precipitation">
-              <h3>Precipitation</h3>
-              {isLoading ? (
-                <p>-</p>
-              ) : (
-                <p>
-                  {weatherData.current ? (
-                    `${weatherData.current.precipitation} ${dropdownOptions.precipitation}`
-                  ) : (
-                    <>
-                      <p>-</p>
-                    </>
-                  )}
-                </p>
-              )}
-            </article>
-          </section>
-
-          {/* The forecat for the week REMEMBER THAT THIS SECTION CONSIDERS ONE WEEK FROM THE DAY YOU DID FORECAST*/}
-          <section className="daily-forecast">
-            <h2>Daily forecast</h2>
-
-            <div>
-              {weatherData.daily && !isLoading ? (
-                weatherData.daily.time
-                  .map((day, i) => ({
-                    date: new Date(day),
-                    code: weatherData.daily.weather_code[i],
-                    max: weatherData.daily.temperature_2m_max[i],
-                    min: weatherData.daily.temperature_2m_min[i],
-                  }))
-                  .filter((item) => {
-                    // keep ONLY today and the future
-                    const today = new Date();
-                    today.setHours(0, 0, 0, 0);
-                    return item.date >= today;
-                  })
-                  .slice(0, 7) // ensure EXACTLY 7 days
-                  .map((item, i) => {
-                    const weekday = item.date.toLocaleDateString("en-US", {
-                      weekday: "short",
-                    });
-
-                    return (
-                      <article key={i}>
-                        <h3>{weekday}</h3>
-
-                        <img
-                          src={weatherIcons[item.code] || iconOvercast}
-                          alt="Weather icon"
-                        />
-
-                        <div className="degres-range">
-                          <p className="max-d">{item.max}°</p>
-                          <p className="min-d">{item.min}°</p>
-                        </div>
-                      </article>
-                    );
-                  })
-              ) : (
-                // ===== fallback UI before search =====
                 <>
-                  {Array.from({ length: 7 }).map(() => (
-                    <article className="empty-days"></article>
-                  ))}
+                  {" "}
+                  <h3 className="city-country">
+                    {weatherData.location ? weatherData.location : ""}
+                  </h3>
+                  <p className="date">
+                    {weatherData.location
+                      ? (() => {
+                          const d = new Date();
+                          return `${d.toLocaleDateString("en-US", {
+                            weekday: "long",
+                          })}, ${d.toLocaleDateString("en-US", {
+                            month: "short",
+                          })} ${d.getDate()} ${d.getFullYear()}`;
+                        })()
+                      : ""}
+                  </p>
+                  {todayIcon && <img src={todayIcon} alt="Weather icon" />}
+                  <h1 className="degree">
+                    {weatherData.current &&
+                      `${Math.round(weatherData.current.temperature_2m)}°`}
+                  </h1>
                 </>
               )}
-            </div>
-          </section>
+            </section>
 
-          <section className="hourly-forecast">
-            <div className="top-pick-a-day">
-              <h2>Hourly forecast</h2>
-              <section className="dropdown-day">
-                <button onClick={() => setOpenHourlyDropdown((prev) => !prev)}>
-                  {selectedDay ? getWeekday(selectedDay) : "Today"}
-                  <img src={iconDropdown} alt="Dropdown icon" />
-                </button>
-
-                {isRenderedHour && weatherData.location && (
-                  <section
-                    className={
-                      openHourlyDropdown
-                        ? "dropdown-container enter"
-                        : "dropdown-container fade"
-                    }
-                  >
-                    {weatherData.daily.time
-                      .map((day) => new Date(day))
-                      .filter((date) => {
-                        const today = new Date();
-                        today.setHours(0, 0, 0, 0);
-                        return date >= today;
-                      })
-                      .map((date) => {
-                        const dayISO = date.toISOString().split("T")[0];
-                        const weekday = date.toLocaleDateString("en-US", {
-                          weekday: "long",
-                        });
-
-                        return (
-                          <label key={dayISO} className="day-option">
-                            <span>{weekday}</span>
-                            <input
-                              type="radio"
-                              name="day-option"
-                              checked={selectedDay === dayISO}
-                              onChange={() => {
-                                setSelectedDay(dayISO);
-                                setOpenHourlyDropdown(false);
-                              }}
-                            />
-
-                            {selectedDay === dayISO ? (
-                              <img
-                                src={checkMark}
-                                alt="check mark"
-                                className="full-img"
-                              />
-                            ) : (
-                              <span className="empty-img"></span>
-                            )}
-                          </label>
-                        );
-                      })}
-                  </section>
+            {/* The 4 general forecats */}
+            <section className="general-forecast">
+              <article className="feels-like">
+                <h3>Feels Like</h3>
+                {isLoading ? (
+                  <p>-</p>
+                ) : (
+                  <p>
+                    {weatherData.current ? (
+                      `${Math.round(weatherData.current.apparent_temperature)}°`
+                    ) : (
+                      <>
+                        <p>-</p>
+                      </>
+                    )}
+                  </p>
                 )}
-              </section>
-            </div>
-            {weatherData.location && !isLoading ? (
-              <HourlyForecast
-                weatherData={weatherData}
-                selectedDay={selectedDay}
-              />
-            ) : (
-              <ul className="hours-list">
-                {Array.from({ length: 8 }).map((_, i) => (
-                  <li className="empty-container" key={i}></li>
-                ))}
-              </ul>
-            )}
-          </section>
-        </>
-      </main>
+              </article>
+
+              <article className="humidity">
+                <h3>Humidity</h3>
+                {isLoading ? (
+                  <p>-</p>
+                ) : (
+                  <p>
+                    {weatherData.current ? (
+                      `${weatherData.current.relative_humidity_2m}%`
+                    ) : (
+                      <>
+                        <p>-</p>
+                      </>
+                    )}
+                  </p>
+                )}
+              </article>
+
+              <article className="wind">
+                <h3>Wind</h3>
+                {isLoading ? (
+                  <p>-</p>
+                ) : (
+                  <p>
+                    {weatherData.current ? (
+                      `${Math.round(weatherData.current.wind_speed_10m)} ${
+                        dropdownOptions.windSpeed
+                      }`
+                    ) : (
+                      <>
+                        <p>-</p>
+                      </>
+                    )}
+                  </p>
+                )}
+              </article>
+
+              <article className="precipitation">
+                <h3>Precipitation</h3>
+                {isLoading ? (
+                  <p>-</p>
+                ) : (
+                  <p>
+                    {weatherData.current ? (
+                      `${weatherData.current.precipitation} ${dropdownOptions.precipitation}`
+                    ) : (
+                      <>
+                        <p>-</p>
+                      </>
+                    )}
+                  </p>
+                )}
+              </article>
+            </section>
+
+            {/* The forecat for the week REMEMBER THAT THIS SECTION CONSIDERS ONE WEEK FROM THE DAY YOU DID FORECAST*/}
+            <section className="daily-forecast">
+              <h2>Daily forecast</h2>
+
+              <div>
+                {weatherData.daily && !isLoading ? (
+                  weatherData.daily.time
+                    .map((day, i) => ({
+                      date: new Date(day),
+                      code: weatherData.daily.weather_code[i],
+                      max: weatherData.daily.temperature_2m_max[i],
+                      min: weatherData.daily.temperature_2m_min[i],
+                    }))
+                    .filter((item) => {
+                      // keep ONLY today and the future
+                      const today = new Date();
+                      today.setHours(0, 0, 0, 0);
+                      return item.date >= today;
+                    })
+                    .slice(0, 7) // ensure EXACTLY 7 days
+                    .map((item, i) => {
+                      const weekday = item.date.toLocaleDateString("en-US", {
+                        weekday: "short",
+                      });
+
+                      return (
+                        <article key={i}>
+                          <h3>{weekday}</h3>
+
+                          <img
+                            src={weatherIcons[item.code] || iconOvercast}
+                            alt="Weather icon"
+                          />
+
+                          <div className="degres-range">
+                            <p className="max-d">{item.max}°</p>
+                            <p className="min-d">{item.min}°</p>
+                          </div>
+                        </article>
+                      );
+                    })
+                ) : (
+                  // ===== fallback UI before search =====
+                  <>
+                    {Array.from({ length: 7 }).map(() => (
+                      <article className="empty-days"></article>
+                    ))}
+                  </>
+                )}
+              </div>
+            </section>
+
+            <section className="hourly-forecast">
+              <div className="top-pick-a-day">
+                <h2>Hourly forecast</h2>
+                <section className="dropdown-day">
+                  <button
+                    onClick={() => setOpenHourlyDropdown((prev) => !prev)}
+                  >
+                    {selectedDay ? getWeekday(selectedDay) : "Today"}
+                    <img src={iconDropdown} alt="Dropdown icon" />
+                  </button>
+
+                  {isRenderedHour && weatherData.location && (
+                    <section
+                      className={
+                        openHourlyDropdown
+                          ? "dropdown-container enter"
+                          : "dropdown-container fade"
+                      }
+                    >
+                      {weatherData.daily.time
+                        .map((day) => new Date(day))
+                        .filter((date) => {
+                          const today = new Date();
+                          today.setHours(0, 0, 0, 0);
+                          return date >= today;
+                        })
+                        .map((date) => {
+                          const dayISO = date.toISOString().split("T")[0];
+                          const weekday = date.toLocaleDateString("en-US", {
+                            weekday: "long",
+                          });
+
+                          return (
+                            <label key={dayISO} className="day-option">
+                              <span>{weekday}</span>
+                              <input
+                                type="radio"
+                                name="day-option"
+                                checked={selectedDay === dayISO}
+                                onChange={() => {
+                                  setSelectedDay(dayISO);
+                                  setOpenHourlyDropdown(false);
+                                }}
+                              />
+
+                              {selectedDay === dayISO ? (
+                                <img
+                                  src={checkMark}
+                                  alt="check mark"
+                                  className="full-img"
+                                />
+                              ) : (
+                                <span className="empty-img"></span>
+                              )}
+                            </label>
+                          );
+                        })}
+                    </section>
+                  )}
+                </section>
+              </div>
+              {weatherData.location && !isLoading ? (
+                <HourlyForecast
+                  weatherData={weatherData}
+                  selectedDay={selectedDay}
+                />
+              ) : (
+                <ul className="hours-list">
+                  {Array.from({ length: 8 }).map((_, i) => (
+                    <li className="empty-container" key={i}></li>
+                  ))}
+                </ul>
+              )}
+            </section>
+          </>
+        </main>
+      )}
     </>
   );
 }
