@@ -9,12 +9,10 @@ import weatherNowLogo from "./images/logo.svg";
 import checkMark from "./images/icon-checkmark.svg";
 import iconDrizzle from "./images/icon-drizzle.webp";
 import iconDropdown from "./images/icon-dropdown.svg"; //<==========
-// import iconError from "./images/icon-error.svg";
 import iconFog from "./images/icon-fog.webp";
-// import iconLoading from "./images/icon-loading.svg";
 import iconSearch from "./images/icon-search.svg";
 
-// import iconRetry from "./images/icon-retry.svg";
+import iconRetry from "./images/icon-retry.svg";
 import iconUnits from "./images/icon-units.svg";
 import iconError from "./images/icon-error.svg";
 //Forcast icons
@@ -31,6 +29,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [clicked, setClicked] = useState(false);
   const [hasError, setHasError] = useState(false);
+  const [retry, setRetry] = useState(false);
 
   //dropdown
   const [openDropdown, setOpenDropdown] = useState(false);
@@ -80,6 +79,15 @@ function App() {
       return () => clearTimeout(timer);
     }
   }, [openHourlyDropdown]);
+
+  useEffect(() => {
+    if (hasError && !isLoading) {
+      const timer = setTimeout(() => {
+        setHasError(false);
+      }, 200);
+      return () => clearTimeout(timer);
+    }
+  }, [retry]);
 
   //======== functions ==========
 
@@ -481,35 +489,46 @@ function App() {
           </section>
         </nav>
 
-        <h1 className="title">How's the sky looking today?</h1>
-
-        <div className="search-bar">
-          <div className="search-input">
-            <img src={iconSearch} alt="search icon" />
-            <input
-              type="text"
-              placeholder="Search for a place..."
-              className="search-input"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-
-          <button
-            className="search"
-            onClick={() => fetchData(searchQuery, dropdownOptions)}
-          >
-            Search
-          </button>
-        </div>
+        {hasError && (!isLoading || !weatherData.location) ? (
+          <section className="error-page">
+            <img src={iconError} alt="An Icon Error" />
+            <h1>Something went wrong</h1>
+            <p>
+              We couldn't connect to the sercer (API error). Please try again in
+              a few moments.
+            </p>
+            <button onClick={() => setRetry((prev) => !prev)}>
+              <img src={iconRetry} alt="Retry icon" />
+              Retry
+            </button>
+          </section>
+        ) : (
+          <>
+            <h1 className="title">How's the sky looking today?</h1>
+            <div className="search-bar">
+              <div className="search-input">
+                <img src={iconSearch} alt="search icon" />
+                <input
+                  type="text"
+                  placeholder="Search for a place..."
+                  className="search-input"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+              <button
+                className="search"
+                onClick={() => fetchData(searchQuery, dropdownOptions)}
+              >
+                Search
+              </button>
+            </div>
+          </>
+        )}
       </header>
 
       {/* ========= The MAIN ========= */}
-      {hasError && !isLoading ? (
-        <section className="error-page">
-          <img src={iconError} alt="An Icon Error" />
-        </section>
-      ) : (
+      {!hasError && (
         <main>
           <>
             {/* forcast of today */}
