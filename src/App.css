@@ -226,6 +226,7 @@ html body #root header div.search-bar > button:active {
 }
 html body #root header section.error-page {
   padding-top: 20%;
+  height: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -251,6 +252,8 @@ html body #root header section.error-page button {
   align-items: center;
   padding-top: 2%;
   padding-bottom: 2%;
+  padding-right: 2%;
+  padding-left: 2%;
   background-color: rgb(51, 52, 95);
   border: none;
   border-radius: 5px;
@@ -263,6 +266,9 @@ html body #root header section.error-page button:hover, html body #root header s
 }
 html body #root header section.error-page button:active {
   transform: scale(1.8);
+}
+html body #root header section.error-page button img {
+  width: 30%;
 }
 html body #root header.loading-error {
   height: 40%;
@@ -587,7 +593,7 @@ html body #root main section.hourly-forecast ul.hours-list li.empty-container {
 @media (min-width: 992px) {
   html {
     font-size: 16px;
-    height: 70vw;
+    height: 60vw;
   }
   html body {
     height: 100%;
@@ -653,6 +659,22 @@ html body #root main section.hourly-forecast ul.hours-list li.empty-container {
     height: 100%;
     width: 10%;
     margin: 0%;
+  }
+  html body #root header section.error-page {
+    width: 100%;
+    padding-top: 5%;
+  }
+  html body #root header section.error-page img {
+    width: 5%;
+  }
+  html body #root header section.error-page h1 {
+    font-size: 3rem;
+  }
+  html body #root header section.error-page p {
+    width: 50%;
+  }
+  html body #root header section.error-page button {
+    width: 12%;
   }
   html body #root main {
     height: 100%;

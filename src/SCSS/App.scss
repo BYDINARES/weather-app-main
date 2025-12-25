@@ -257,6 +257,7 @@ html {
 
         section.error-page {
           padding-top: 20%;
+          height: auto;
 
           display: flex;
           flex-direction: column;
@@ -285,6 +286,8 @@ html {
             align-items: center;
             padding-top: 2%;
             padding-bottom: 2%;
+            padding-right: 2%;
+            padding-left: 2%;
 
             background-color: rgb(51, 52, 95);
             border: none;
@@ -300,6 +303,10 @@ html {
             }
             &:active {
               transform: scale(1.8);
+            }
+
+            img {
+              width: 30%;
             }
           }
         }
